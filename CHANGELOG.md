@@ -1,3 +1,10 @@
+# [2.37.0-beta.1](https://github.com/chadbyte/clay/compare/v2.36.2-beta.9...v2.37.0-beta.1) (2026-05-07)
+
+
+### Features
+
+* **sdk:** bump claude-agent-sdk to 0.2.132 and set Options.title at creation ([f46b06d](https://github.com/chadbyte/clay/commit/f46b06dc73d13f2cfc846bf5788d2ae896582e66)), closes [#45](https://github.com/chadbyte/clay/issues/45)
+
 ## [2.36.2-beta.9](https://github.com/chadbyte/clay/compare/v2.36.2-beta.8...v2.36.2-beta.9) (2026-05-07)
 
 
