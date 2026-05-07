@@ -1,3 +1,10 @@
+# [2.38.0-beta.3](https://github.com/chadbyte/clay/compare/v2.38.0-beta.2...v2.38.0-beta.3) (2026-05-07)
+
+
+### Features
+
+* **clay:** standalone phablet-style home chat panel and hide Clay from sidebar ([b99dd18](https://github.com/chadbyte/clay/commit/b99dd181f96e830f99859c3855a2cb05dedac80e)), closes [#home-hub](https://github.com/chadbyte/clay/issues/home-hub)
+
 # [2.38.0-beta.2](https://github.com/chadbyte/clay/compare/v2.38.0-beta.1...v2.38.0-beta.2) (2026-05-07)
 
 
