@@ -1,3 +1,10 @@
+# [2.38.0-beta.2](https://github.com/chadbyte/clay/compare/v2.38.0-beta.1...v2.38.0-beta.2) (2026-05-07)
+
+
+### Bug Fixes
+
+* **clay:** use Clay app icon for Clay avatar instead of Ally asset ([48a4337](https://github.com/chadbyte/clay/commit/48a4337f60e5bf16d39ed8887e73065fdd1bc68a))
+
 # [2.38.0-beta.1](https://github.com/chadbyte/clay/compare/v2.37.0...v2.38.0-beta.1) (2026-05-07)
 
 
