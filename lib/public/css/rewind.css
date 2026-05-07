@@ -284,6 +284,14 @@
   color: var(--accent2);
 }
 
+.activity-inline-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
 .activity-inline .activity-icon {
   display: inline-flex;
   animation: sparkle 2s ease-in-out infinite;
