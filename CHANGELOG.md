@@ -1,3 +1,11 @@
+# [2.39.0-beta.5](https://github.com/chadbyte/clay/compare/v2.39.0-beta.4...v2.39.0-beta.5) (2026-05-25)
+
+
+### Features
+
+* **settings:** theme picker, terminal font, IME-safe renderer ([04ca4fe](https://github.com/chadbyte/clay/commit/04ca4fe4c0707cddebc71e0540a851aad0ca886c)), closes [#us-theme-switcher](https://github.com/chadbyte/clay/issues/us-theme-switcher)
+* **theme:** move theme picker to user island palette button ([583c43e](https://github.com/chadbyte/clay/commit/583c43e9432afa7fec9bd3fe008a9f4a781e3c54))
+
 # [2.39.0-beta.4](https://github.com/chadbyte/clay/compare/v2.39.0-beta.3...v2.39.0-beta.4) (2026-05-25)
 
 
