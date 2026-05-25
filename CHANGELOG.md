@@ -1,3 +1,21 @@
+# [2.39.0](https://github.com/chadbyte/clay/compare/v2.38.0...v2.39.0) (2026-05-25)
+
+
+### Bug Fixes
+
+* **sdk-bridge:** preserve MCP-mode AskUserQuestion entries across turn boundaries ([b506369](https://github.com/chadbyte/clay/commit/b506369949a6b27ac7944a0e3b736993db4578d7))
+
+
+### Features
+
+* prepare 2026-06-15 cutover with What's New system ([f02c85b](https://github.com/chadbyte/clay/commit/f02c85b1184be30d901ef34d9e33e99b9d200e1a))
+* **sessions:** embed claude TUI as a session mode with cross-mode resume ([6812ef6](https://github.com/chadbyte/clay/commit/6812ef69de25c39f58ab77fa886579c1522241b6)), closes [#messages](https://github.com/chadbyte/clay/issues/messages) [#input-area](https://github.com/chadbyte/clay/issues/input-area) [#new-msg-btn](https://github.com/chadbyte/clay/issues/new-msg-btn)
+* **settings:** theme picker, terminal font, IME-safe renderer ([04ca4fe](https://github.com/chadbyte/clay/commit/04ca4fe4c0707cddebc71e0540a851aad0ca886c)), closes [#us-theme-switcher](https://github.com/chadbyte/clay/issues/us-theme-switcher)
+* **theme:** move theme picker to user island palette button ([583c43e](https://github.com/chadbyte/clay/commit/583c43e9432afa7fec9bd3fe008a9f4a781e3c54))
+* **tui:** notification pipeline, auto-approve allow-list, inline modal, jsonl watcher ([a012413](https://github.com/chadbyte/clay/commit/a0124133f12f39d950e3c6a95fc07b25ea84e7c5))
+* **tui:** policy explainer modal, Go-to-session secondary CTA, restart persistence ([584beac](https://github.com/chadbyte/clay/commit/584beac4a99a0ada55005290942c8dc626fc0e50))
+* unify CLI sessions with Clay list and clean SDK warmup ([7e4ebdd](https://github.com/chadbyte/clay/commit/7e4ebdd3b966f2e9011ef04265d0885cd132eeb4))
+
 # [2.39.0-beta.5](https://github.com/chadbyte/clay/compare/v2.39.0-beta.4...v2.39.0-beta.5) (2026-05-25)
 
 
