@@ -1,3 +1,10 @@
+# [2.39.0-beta.4](https://github.com/chadbyte/clay/compare/v2.39.0-beta.3...v2.39.0-beta.4) (2026-05-25)
+
+
+### Features
+
+* unify CLI sessions with Clay list and clean SDK warmup ([7e4ebdd](https://github.com/chadbyte/clay/commit/7e4ebdd3b966f2e9011ef04265d0885cd132eeb4))
+
 # [2.39.0-beta.3](https://github.com/chadbyte/clay/compare/v2.39.0-beta.2...v2.39.0-beta.3) (2026-05-25)
 
 
