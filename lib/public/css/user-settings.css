@@ -859,3 +859,46 @@
     align-items: stretch;
   }
 }
+
+/* Terminal font picker row */
+.us-term-font-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.us-term-font-family {
+  flex: 1 1 auto;
+  min-width: 180px;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 13px;
+}
+.us-term-font-custom {
+  flex: 1 1 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 13px;
+  font-family: "Roboto Mono", monospace;
+}
+.us-term-font-custom.hidden { display: none; }
+.us-term-font-size {
+  width: 64px;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 13px;
+  text-align: center;
+}
+.us-term-font-unit {
+  font-size: 13px;
+  color: var(--text-dimmer);
+}

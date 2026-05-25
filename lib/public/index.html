@@ -1003,17 +1003,25 @@
           <h2>Appearance</h2>
           <div class="settings-card">
             <div class="settings-label" style="margin-bottom:10px;">Theme</div>
-            <div class="layout-switcher" id="us-theme-switcher">
-              <button class="layout-option" data-theme="light">
-                <span class="layout-option-icon">☀️</span>
-                <span class="layout-option-label">Light</span>
-                <span class="layout-option-desc">For people who open curtains. Bright, clean, productive.</span>
-              </button>
-              <button class="layout-option" data-theme="dark">
-                <span class="layout-option-icon">🌙</span>
-                <span class="layout-option-label">Dark</span>
-                <span class="layout-option-desc">For those who thrive after sunset. Your screen, your cave.</span>
-              </button>
+            <div id="us-theme-switcher"></div>
+          </div>
+          <div class="settings-card">
+            <div class="settings-label" style="margin-bottom:10px;">Terminal font</div>
+            <div class="us-term-font-row">
+              <select id="us-term-font-family" class="us-term-font-family">
+                <option value="'SF Mono', Menlo, Monaco, 'Courier New', monospace">SF Mono / Menlo (default)</option>
+                <option value="'JetBrains Mono', 'SF Mono', Menlo, monospace">JetBrains Mono</option>
+                <option value="'Fira Code', 'SF Mono', Menlo, monospace">Fira Code</option>
+                <option value="'Cascadia Code', 'SF Mono', Menlo, monospace">Cascadia Code</option>
+                <option value="'IBM Plex Mono', 'SF Mono', Menlo, monospace">IBM Plex Mono</option>
+                <option value="'Source Code Pro', 'SF Mono', Menlo, monospace">Source Code Pro</option>
+                <option value="'Roboto Mono', 'SF Mono', Menlo, monospace">Roboto Mono</option>
+                <option value="ui-monospace, monospace">System monospace</option>
+                <option value="__custom__">Custom...</option>
+              </select>
+              <input type="text" id="us-term-font-family-custom" class="us-term-font-custom hidden" placeholder="e.g. 'My Font', monospace" maxlength="200">
+              <input type="number" id="us-term-font-size" class="us-term-font-size" min="9" max="32" step="1">
+              <span class="us-term-font-unit">px</span>
             </div>
           </div>
           <div class="settings-card">
@@ -2301,7 +2309,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@xterm/xterm@5/lib/xterm.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0/lib/addon-fit.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-web-links@0/lib/addon-web-links.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@xterm/addon-webgl@0/lib/addon-webgl.min.js"></script>
 <script type="module" src="app.js"></script>
 <div id="pwa-install-modal" class="pwa-modal hidden">
   <div class="pwa-modal-backdrop"></div>

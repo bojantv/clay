@@ -1119,35 +1119,6 @@
   margin-left: 12px;
 }
 
-/* TUI session indicator: a tiny black "screen" with a bold green prompt
-   glyph, meant to read as a miniature terminal (CRT-style cursor) at
-   sidebar scale. Aligned to the middle of the text x-height so it sits
-   visually centered with the session title rather than dropping below. */
-.session-tui-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 14px;
-  height: 14px;
-  border-radius: 3px;
-  background: #000;
-  margin-right: 6px;
-  vertical-align: middle;
-  flex-shrink: 0;
-  /* Nudge upward a hair so the icon optical-centers with lowercase glyphs
-     (lucide icons render slightly below the geometric center). */
-  position: relative;
-  top: -1px;
-}
-.session-tui-icon svg,
-.session-tui-icon .lucide {
-  width: 10px;
-  height: 10px;
-  color: #50fa7b;
-  stroke: #50fa7b;
-  stroke-width: 3;
-}
-
 .session-top-action:hover {
   background: var(--sidebar-hover);
   color: var(--text);
