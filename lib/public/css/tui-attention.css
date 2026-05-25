@@ -1,3 +1,13 @@
+/* Subtle 1px divider against the sidebar so the embedded terminal
+   doesn't visually bleed into the session list. The host is
+   position:fixed and anchored to #messages' bounding rect, so its
+   left edge sits exactly on the sidebar boundary. Color matches
+   #main-area's existing border-left so the line reads as one
+   continuous edge with the rest of the chrome. */
+#tui-session-host {
+  border-left: 1px solid var(--border-subtle);
+}
+
 /* Policy notice that sits above the embedded xterm in fullscreen TUI
    sessions, explaining why this mode exists (post-2026-06-15 Agent SDK
    billing split). Thin so it doesn't eat terminal real estate. */
