@@ -1154,6 +1154,18 @@
   .mobile-only { display: none !important; }
 }
 
+/* Mobile TUI: the composer is a plain conduit to the PTY (session-tui-view.js
+   toggles body.tui-composer-active). Hide controls that don't apply to a
+   terminal session - scheduled send, @mentions, and model/vendor config.
+   Attach (files/images -> path injection) and voice input stay available. */
+body.tui-composer-active #schedule-btn,
+body.tui-composer-active #ask-mate-btn,
+body.tui-composer-active #vendor-toggle-wrap,
+body.tui-composer-active #active-vendor-indicator,
+body.tui-composer-active #config-chip-wrap {
+  display: none !important;
+}
+
 /* ==========================================================================
    Input More Bottom Sheet (mobile)
    ========================================================================== */
