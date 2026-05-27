@@ -1,3 +1,10 @@
+## [2.40.1-beta.1](https://github.com/chadbyte/clay/compare/v2.40.0...v2.40.1-beta.1) (2026-05-27)
+
+
+### Bug Fixes
+
+* **tui:** keep a session in its live mode for every viewer ([26893de](https://github.com/chadbyte/clay/commit/26893decf81e35b0b64ee288a1068bb0341f3b05))
+
 # [2.40.0](https://github.com/chadbyte/clay/compare/v2.39.0...v2.40.0) (2026-05-27)
 
 
