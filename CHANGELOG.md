@@ -1,3 +1,19 @@
+# [2.41.0-beta.1](https://github.com/chadbyte/clay/compare/v2.40.1-beta.1...v2.41.0-beta.1) (2026-05-28)
+
+
+### Bug Fixes
+
+* **tui:** tighten grab boundaries against false stops and false matches ([0d3ec5a](https://github.com/chadbyte/clay/commit/0d3ec5ac7328f2b6cd2aeab0b85949a2a8acec5e))
+
+
+### Features
+
+* **server:** let users create their first project from the app shell ([d8cd2b7](https://github.com/chadbyte/clay/commit/d8cd2b792828f036f09f28785d9ede53b7a38f17))
+* **tui:** add D2 Coding font option and bump default size to 14pt ([d3947dd](https://github.com/chadbyte/clay/commit/d3947ddb3908faa290518beb5f9d1d8e45b3e325))
+* **tui:** hover-to-grab assistant messages from xterm output ([91fffed](https://github.com/chadbyte/clay/commit/91fffed9201b256c0b60fe198f7d583144734a97))
+* **tui:** polish grab overlay with entry animation, auto-hide on scroll ([5a02f3d](https://github.com/chadbyte/clay/commit/5a02f3d28a4626c369e8edbe7e15fe31c5f66c04))
+* **tui:** shake icon, blink favicon, and ding on tui_attention ([34fe571](https://github.com/chadbyte/clay/commit/34fe571dacd015d0599ca9590102f877e846cd41))
+
 ## [2.40.1-beta.1](https://github.com/chadbyte/clay/compare/v2.40.0...v2.40.1-beta.1) (2026-05-27)
 
 
