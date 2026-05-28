@@ -1,3 +1,10 @@
+## [2.41.1-beta.1](https://github.com/chadbyte/clay/compare/v2.41.0...v2.41.1-beta.1) (2026-05-28)
+
+
+### Bug Fixes
+
+* **tui:** read transcript from session owner's home in OS-isolation mode ([3b79723](https://github.com/chadbyte/clay/commit/3b79723b70a80809db41af2d761c4f0b3c6760d5))
+
 # [2.41.0](https://github.com/chadbyte/clay/compare/v2.40.0...v2.41.0) (2026-05-28)
 
 
