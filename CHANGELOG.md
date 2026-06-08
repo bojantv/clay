@@ -1,3 +1,10 @@
+# [2.42.0-beta.1](https://github.com/chadbyte/clay/compare/v2.41.1...v2.42.0-beta.1) (2026-06-08)
+
+
+### Features
+
+* **tui:** add bypass-permissions launch option to Claude session button ([#364](https://github.com/chadbyte/clay/issues/364)) ([25da706](https://github.com/chadbyte/clay/commit/25da706a4a3c343641ad9138f08b5805e9824c42))
+
 ## [2.41.1](https://github.com/chadbyte/clay/compare/v2.41.0...v2.41.1) (2026-05-28)
 
 
