@@ -1,0 +1,8 @@
+# Session IDs to KEEP visible. One UUID per line. Lines starting with # are ignored.
+# Run: node scripts/list-sessions.js 50  to see candidates
+# Then: node scripts/hide-old-sessions.js          (dry run)
+#       node scripts/hide-old-sessions.js --apply  (apply — stop daemon first)
+
+# Known so far (from prior chat):
+304b6ae0-0832-464f-9755-f7bfc6c4fd2d
+019e8cae-e7e5-7d72-934b-7ed2a1361037
