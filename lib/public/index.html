@@ -518,18 +518,27 @@
                 <img id="active-vendor-icon" alt="">
               </div>
               <div id="config-chip-wrap" class="hidden">
-                <button id="config-chip" title="Model, mode, and effort settings">
+                <button id="config-chip" title="Current session agent settings">
                   <i class="config-chip-icon" data-lucide="sliders-horizontal"></i>
                   <span id="config-chip-label"></span>
                   <i data-lucide="chevron-down"></i>
                 </button>
                 <div id="config-popover" class="hidden">
+                  <div class="config-popover-header">
+                    <span class="config-popover-title">Settings</span>
+                    <button id="config-switch-vendor-btn" type="button" class="config-switch-vendor-btn" title="Switch vendor for this session"></button>
+                  </div>
+                  <div id="config-provider-route-menu" class="config-provider-route-menu hidden"></div>
                   <div class="config-section">
-                    <div class="config-section-label">MODEL</div>
+                    <div class="config-section-label">SESSION MODEL</div>
                     <div id="config-model-list" class="config-radio-list"></div>
                   </div>
-                  <div class="config-section">
-                    <div class="config-section-label">MODE</div>
+                  <div id="config-automation-section" class="config-section">
+                    <div class="config-section-label">AUTOMATION</div>
+                    <div id="config-automation-bar" class="config-segmented"></div>
+                  </div>
+                  <div id="config-mode-section" class="config-section">
+                    <div class="config-section-label">CLAUDE MODE</div>
                     <div id="config-mode-list" class="config-radio-list"></div>
                   </div>
                   <div id="config-effort-section" class="config-section">
@@ -537,7 +546,7 @@
                     <div id="config-effort-bar" class="config-segmented"></div>
                   </div>
                   <div id="config-thinking-section" class="config-section">
-                    <div class="config-section-label">THINKING</div>
+                    <div class="config-section-label">CLAUDE THINKING</div>
                     <div id="config-thinking-bar" class="config-segmented"></div>
                     <div id="config-thinking-budget-row" class="config-budget-row" style="display:none">
                       <label class="config-budget-label">Budget tokens</label>
@@ -546,7 +555,7 @@
                     </div>
                   </div>
                   <div id="config-beta-section" class="config-section" style="display:none">
-                    <div class="config-section-label">BETA</div>
+                    <div class="config-section-label">CLAUDE BETA</div>
                     <div class="config-toggle-row">
                       <span class="config-toggle-label">1M Context</span>
                       <button id="config-beta-1m" class="config-toggle-btn" role="switch" aria-checked="false">
@@ -555,15 +564,15 @@
                     </div>
                   </div>
                   <div id="config-approval-section" class="config-section" style="display:none">
-                    <div class="config-section-label">APPROVAL</div>
+                    <div class="config-section-label">CODEX APPROVAL</div>
                     <div id="config-approval-bar" class="config-segmented"></div>
                   </div>
                   <div id="config-sandbox-section" class="config-section" style="display:none">
-                    <div class="config-section-label">SANDBOX</div>
+                    <div class="config-section-label">CODEX SANDBOX</div>
                     <div id="config-sandbox-bar" class="config-segmented"></div>
                   </div>
                   <div id="config-websearch-section" class="config-section" style="display:none">
-                    <div class="config-section-label">WEB SEARCH</div>
+                    <div class="config-section-label">CODEX WEB SEARCH</div>
                     <div id="config-websearch-bar" class="config-segmented"></div>
                   </div>
                 </div>
@@ -679,7 +688,6 @@
           <select id="ps-nav-dropdown" class="settings-nav-dropdown">
             <optgroup label="General">
               <option value="profile" selected>Profile</option>
-              <option value="defaults">Model</option>
             </optgroup>
             <optgroup label="Config">
               <option value="instructions">Instructions</option>
@@ -689,7 +697,6 @@
           <div class="server-settings-nav-items">
             <div class="settings-nav-category">General</div>
             <button class="settings-nav-item active" data-section="profile"><span>Profile</span></button>
-            <button class="settings-nav-item" data-section="defaults"><span>Model</span></button>
             <div class="settings-nav-separator"></div>
             <div class="settings-nav-category">Config</div>
             <button class="settings-nav-item" data-section="instructions"><span>Instructions</span></button>
@@ -744,64 +751,14 @@
               </div>
             </div>
           </div>
-          <!-- Defaults -->
-          <div class="ps-section" data-section="defaults">
-            <h2>Model</h2>
-            <p class="ps-section-desc">Configure which model to use and how Claude behaves during sessions.</p>
-            <div class="settings-card">
-              <div class="settings-field">
-                <label class="settings-label">Model</label>
-                <div class="settings-hint">Choose the Claude model to use. Larger models are slower but more capable.</div>
-                <div id="ps-model-list" class="settings-model-list"></div>
-              </div>
-            </div>
-            <div class="settings-card" id="ps-beta-card" style="display:none">
-              <div class="settings-field">
-                <label class="settings-label">Extended Context (Beta)</label>
-                <div class="settings-hint">Enable 1M token context window for Sonnet models. Allows processing much larger codebases and files, but may increase latency.</div>
-                <label class="settings-toggle-row ps-beta-toggle-row">
-                  <div>
-                    <span class="settings-label">1M Context</span>
-                  </div>
-                  <input type="checkbox" id="ps-beta-1m">
-                  <span class="toggle-track"><span class="toggle-thumb"></span></span>
-                </label>
-              </div>
-            </div>
-            <div class="settings-card">
-              <div class="settings-field">
-                <label class="settings-label">Mode</label>
-                <div class="settings-hint">Controls how Claude handles tool use and file edits.</div>
-                <div id="ps-mode-list" class="settings-model-list"></div>
-              </div>
-            </div>
-            <div class="settings-card" id="ps-effort-card">
-              <div class="settings-field">
-                <label class="settings-label">Effort</label>
-                <div class="settings-hint">Controls how much thinking effort Claude puts into responses. Higher effort means longer, more thorough responses.</div>
-                <div class="settings-btn-group" id="ps-effort-bar"></div>
-              </div>
-            </div>
-            <div class="settings-card" id="ps-thinking-card">
-              <div class="settings-field">
-                <label class="settings-label">Thinking</label>
-                <div class="settings-hint">Controls whether Claude shows its reasoning process. Budget mode lets you set a token limit.</div>
-                <div class="settings-btn-group" id="ps-thinking-bar"></div>
-                <div id="ps-thinking-budget-row" class="settings-budget-row" style="display:none">
-                  <label class="settings-budget-label">Budget tokens</label>
-                  <input id="ps-thinking-budget" type="number" class="settings-budget-input" min="1024" max="128000" step="1024" value="10000">
-                </div>
-              </div>
-            </div>
-          </div>
           <!-- Instructions -->
           <div class="ps-section" data-section="instructions">
-            <h2>CLAUDE.md</h2>
-            <p class="ps-section-desc">Edit the CLAUDE.md file for this project. These instructions are passed to Claude at the start of every session.</p>
+            <h2>Instructions</h2>
+            <p class="ps-section-desc">Edit this project's instruction file. These instructions are passed to agent sessions for this project.</p>
             <div class="settings-card">
               <div class="settings-field">
                 <div id="ps-instructions-status" class="settings-hint"></div>
-                <textarea class="ps-textarea" id="ps-instructions-editor" rows="20" spellcheck="false" placeholder="# Project Instructions&#10;&#10;Write instructions for Claude here..."></textarea>
+                <textarea class="ps-textarea" id="ps-instructions-editor" rows="20" spellcheck="false" placeholder="# Project Instructions&#10;&#10;Write project instructions here..."></textarea>
                 <div class="ps-textarea-actions">
                   <button class="settings-btn-sm" id="ps-instructions-save">Save</button>
                   <span class="ps-save-status" id="ps-instructions-save-status"></span>
@@ -1067,7 +1024,7 @@
               <span class="toggle-track"><span class="toggle-thumb"></span></span>
             </label>
           </div>
-          <div class="settings-card">
+          <div class="settings-card settings-allow-card">
             <div class="settings-label">Auto-approved commands</div>
             <div class="settings-hint">Extra patterns Clay should pre-approve in your <code>~/.claude/settings.json</code> so TUI sessions don't prompt for them. One per line. Examples: <code>Bash(npm test:*)</code>, <code>Read</code>, <code>mcp__myserver__*</code>. Clay's safe defaults (read-only tools, common git/ls/grep) are always applied on top and shown below for reference.</div>
             <textarea id="us-claude-allow-list" rows="6" spellcheck="false" placeholder="Bash(npm test:*)&#10;Bash(make:*)"></textarea>
@@ -1131,13 +1088,12 @@
         <select id="settings-nav-dropdown" class="settings-nav-dropdown">
           <optgroup label="General">
             <option value="overview" selected>Status</option>
+            <option value="vendors">Vendors</option>
             <option value="notifications">Notifications</option>
             <option value="security">Security</option>
           </optgroup>
-          <optgroup label="Defaults">
-            <option value="models">Model</option>
-          </optgroup>
           <optgroup label="Config">
+            <option value="defaults">Defaults</option>
             <option value="claudemd">Instructions</option>
             <option value="environment">Environment</option>
           </optgroup>
@@ -1156,13 +1112,12 @@
         <div class="server-settings-nav-items">
           <div class="settings-nav-category">General</div>
           <button class="settings-nav-item active" data-section="overview"><span>Status</span></button>
+          <button class="settings-nav-item" data-section="vendors"><span>Vendors</span></button>
           <button class="settings-nav-item" data-section="notifications"><span>Notifications</span></button>
           <button class="settings-nav-item" data-section="security"><span>Security</span></button>
           <div class="settings-nav-separator"></div>
-          <div class="settings-nav-category">Defaults</div>
-          <button class="settings-nav-item" data-section="models"><span>Model</span></button>
-          <div class="settings-nav-separator"></div>
           <div class="settings-nav-category">Config</div>
+          <button class="settings-nav-item" data-section="defaults"><span>Defaults</span></button>
           <button class="settings-nav-item" data-section="claudemd"><span>Instructions</span></button>
           <button class="settings-nav-item" data-section="environment"><span>Environment</span></button>
           <button class="settings-nav-item" data-section="storage"><span>Storage</span></button>
@@ -1212,13 +1167,6 @@
               <span class="settings-value settings-badge" id="settings-tls">-</span>
             </div>
             <div class="settings-field-row">
-              <div>
-                <label class="settings-label">Skip Permissions</label>
-                <div class="settings-hint">Auto-approves all tool executions. Restart with <code style="font-size:12px">--dangerously-skip-permissions</code> to enable.</div>
-              </div>
-              <span class="settings-value settings-badge" id="settings-skip-perms">Disabled</span>
-            </div>
-            <div class="settings-field-row">
               <label class="settings-label">Debug</label>
               <span class="settings-value settings-badge" id="settings-debug">-</span>
             </div>
@@ -1257,54 +1205,13 @@
             </div>
           </div>
         </div>
-        <div class="server-settings-section" data-section="models">
-          <h2>Model</h2>
-          <p class="settings-hint" style="margin-bottom: 20px;">Configure which model to use and how Claude behaves during sessions.</p>
-          <div class="settings-card">
-            <div class="settings-field">
-              <label class="settings-label">Model</label>
-              <div class="settings-hint">Choose the Claude model to use. Larger models are slower but more capable.</div>
-              <div id="ss-model-list" class="settings-model-list"></div>
-            </div>
+        <div class="server-settings-section" data-section="vendors">
+          <h2>Vendors</h2>
+          <p class="ps-section-desc">Configure the local command-line tools Clay uses to run each AI provider. Credentials stay in the vendor CLI, not in Clay.</p>
+          <div class="settings-section-actions">
+            <button class="settings-btn-sm" id="settings-vendors-refresh">Refresh vendors</button>
           </div>
-          <div class="settings-card" id="ss-beta-card" style="display:none">
-            <div class="settings-field">
-              <label class="settings-label">Extended Context (Beta)</label>
-              <div class="settings-hint">Enable 1M token context window for Sonnet models. Allows processing much larger codebases and files, but may increase latency.</div>
-              <label class="settings-toggle-row ss-beta-toggle-row">
-                <div>
-                  <span class="settings-label">1M Context</span>
-                </div>
-                <input type="checkbox" id="ss-beta-1m">
-                <span class="toggle-track"><span class="toggle-thumb"></span></span>
-              </label>
-            </div>
-          </div>
-          <div class="settings-card">
-            <div class="settings-field">
-              <label class="settings-label">Mode</label>
-              <div class="settings-hint">Controls how Claude handles tool use and file edits.</div>
-              <div id="ss-mode-list" class="settings-model-list"></div>
-            </div>
-          </div>
-          <div class="settings-card" id="ss-effort-card">
-            <div class="settings-field">
-              <label class="settings-label">Effort</label>
-              <div class="settings-hint">Controls how much thinking effort Claude puts into responses. Higher effort means longer, more thorough responses.</div>
-              <div class="settings-btn-group" id="ss-effort-bar"></div>
-            </div>
-          </div>
-          <div class="settings-card" id="ss-thinking-card">
-            <div class="settings-field">
-              <label class="settings-label">Thinking</label>
-              <div class="settings-hint">Controls whether Claude shows its reasoning process. Budget mode lets you set a token limit.</div>
-              <div class="settings-btn-group" id="ss-thinking-bar"></div>
-              <div id="ss-thinking-budget-row" class="settings-budget-row" style="display:none">
-                <label class="settings-budget-label">Budget tokens</label>
-                <input id="ss-thinking-budget" type="number" class="settings-budget-input" min="1024" max="128000" step="1024" value="10000">
-              </div>
-            </div>
-          </div>
+          <div id="settings-vendor-list" class="settings-vendor-list"></div>
         </div>
         <div class="server-settings-section" data-section="security">
           <h2>Security</h2>
@@ -1366,13 +1273,87 @@
             </label>
           </div>
         </div>
+        <div class="server-settings-section" data-section="defaults">
+          <h2>Defaults</h2>
+          <p class="ps-section-desc">Choose the defaults used when starting new sessions on this Clay server.</p>
+          <div class="ps-vendor-tabs">
+            <button class="ps-vendor-tab active" data-vendor="claude">Claude</button>
+            <button class="ps-vendor-tab" data-vendor="codex">Codex</button>
+          </div>
+          <div class="ps-vendor-panel active" data-vendor-panel="claude">
+            <div class="settings-card">
+              <div class="settings-field">
+                <label class="settings-label">Model</label>
+                <div class="settings-hint">New Claude sessions start with this model unless a project overrides it.</div>
+                <div id="ss-claude-model-list" class="settings-model-list"></div>
+              </div>
+            </div>
+            <div class="settings-card" id="ss-claude-beta-card" style="display:none">
+              <label class="settings-toggle-row">
+                <div>
+                  <span class="settings-label">1M Context</span>
+                  <div class="settings-hint">Use the larger context window for Sonnet models when available.</div>
+                </div>
+                <input type="checkbox" id="ss-claude-beta-1m">
+                <span class="toggle-track"><span class="toggle-thumb"></span></span>
+              </label>
+            </div>
+            <div class="settings-card">
+              <div class="settings-field">
+                <label class="settings-label">Permissions</label>
+                <div class="settings-hint">Controls whether new Claude sessions ask before editing files or running commands.</div>
+                <div id="ss-mode-list" class="settings-model-list"></div>
+              </div>
+            </div>
+            <div class="settings-card">
+              <div class="settings-field">
+                <label class="settings-label">Effort</label>
+                <div class="settings-hint">Higher effort spends more time and tokens on harder tasks.</div>
+                <div class="settings-btn-group" id="ss-effort-bar"></div>
+              </div>
+            </div>
+          </div>
+          <div class="ps-vendor-panel" data-vendor-panel="codex">
+            <div class="settings-card">
+              <div class="settings-field">
+                <label class="settings-label">Model</label>
+                <div class="settings-hint">New Codex sessions start with this model unless a project overrides it.</div>
+                <div id="ss-codex-model-list" class="settings-model-list"></div>
+              </div>
+            </div>
+            <div class="settings-card">
+              <div class="settings-field">
+                <label class="settings-label">Approval</label>
+                <div class="settings-hint">Controls when Codex asks before taking an action.</div>
+                <div id="ss-codex-approval-list" class="settings-model-list"></div>
+              </div>
+              <div class="settings-field">
+                <label class="settings-label">Sandbox</label>
+                <div class="settings-hint">Controls filesystem access for new Codex sessions.</div>
+                <div id="ss-codex-sandbox-list" class="settings-model-list"></div>
+              </div>
+              <div class="settings-field">
+                <label class="settings-label">Web Search</label>
+                <div class="settings-hint">Controls web search behavior for new Codex sessions.</div>
+                <div id="ss-codex-websearch-list" class="settings-model-list"></div>
+              </div>
+            </div>
+            <div class="settings-card">
+              <div class="settings-field">
+                <label class="settings-label">Effort</label>
+                <div class="settings-hint">Higher effort spends more time and tokens on harder tasks.</div>
+                <div class="settings-btn-group" id="ss-codex-effort-bar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="server-settings-section" data-section="claudemd">
-          <h2>CLAUDE.md</h2>
-          <p class="ps-section-desc">Edit the global CLAUDE.md file. These instructions apply to all projects and sessions on this server.</p>
+          <h2>Global Instructions</h2>
+          <p class="ps-section-desc">Edit the global instruction file. These instructions apply to all projects and sessions on this server.</p>
           <div class="settings-card">
             <div class="settings-field">
               <div id="ss-claudemd-status" class="settings-hint"></div>
-              <textarea class="ps-textarea" id="ss-claudemd-editor" rows="20" spellcheck="false" placeholder="# Global Instructions&#10;&#10;Write instructions for Claude here..."></textarea>
+              <textarea class="ps-textarea" id="ss-claudemd-editor" rows="20" spellcheck="false" placeholder="# Global Instructions&#10;&#10;Write global instructions here..."></textarea>
               <div class="ps-textarea-actions">
                 <button class="settings-btn-sm" id="ss-claudemd-save">Save</button>
                 <span class="ps-save-status" id="ss-claudemd-save-status"></span>
@@ -1381,7 +1362,7 @@
           </div>
           <div class="settings-hint" style="margin-top: 8px;">
             <i data-lucide="info" style="width: 14px; height: 14px; vertical-align: -2px;"></i>
-            This file is stored at <code>~/.claude/CLAUDE.md</code>. Project-level CLAUDE.md files take precedence over this global file.
+            This file is stored at <code>~/.claude/CLAUDE.md</code>. Project-level instruction files take precedence over this global file.
           </div>
         </div>
         <div class="server-settings-section" data-section="environment">
