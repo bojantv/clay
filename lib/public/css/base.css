@@ -284,3 +284,23 @@ html, body {
   color: var(--warning);
 }
 
+
+/* Vendor switch divider shown inline in chat */
+.vendor-switch-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+.vendor-switch-divider::before,
+.vendor-switch-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}

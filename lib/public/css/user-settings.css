@@ -361,10 +361,31 @@
 }
 
 /* Auto-approve allow-list editor */
+#user-settings .settings-allow-card {
+  padding: 14px 16px 16px;
+}
+
+#user-settings .settings-allow-card .settings-label {
+  margin-bottom: 6px;
+}
+
+#user-settings .settings-allow-card .settings-hint {
+  margin: 0;
+}
+
+#user-settings .settings-allow-card code {
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: var(--code-bg);
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
 #us-claude-allow-list {
   width: 100%;
-  margin-top: 10px;
-  padding: 8px 10px;
+  min-height: 126px;
+  margin-top: 12px;
+  padding: 10px 12px;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--input-bg);
@@ -383,9 +404,11 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 8px;
+  min-height: 32px;
+  margin-top: 10px;
 }
 .settings-allow-actions .settings-action {
+  min-height: 32px;
   padding: 6px 14px;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -403,7 +426,9 @@
 }
 .settings-allow-status.error { color: var(--error); }
 .settings-allow-defaults {
-  margin-top: 10px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
   font-size: 12px;
   color: var(--text-dimmer);
 }
@@ -412,13 +437,13 @@
   user-select: none;
 }
 .settings-allow-managed {
-  margin-top: 6px;
+  margin-top: 8px;
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 6px;
+  gap: 6px;
 }
 .settings-allow-managed code {
-  padding: 1px 6px;
+  padding: 2px 6px;
   border-radius: 4px;
   background: var(--code-bg);
   color: var(--text-muted);

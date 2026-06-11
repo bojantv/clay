@@ -385,6 +385,107 @@
   color: var(--error);
 }
 
+.settings-badge.settings-badge-off {
+  background: color-mix(in srgb, var(--warning, #eab308) 12%, transparent);
+  color: var(--warning, #eab308);
+}
+
+.settings-vendor-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settings-section-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin: -8px 0 16px;
+}
+
+.settings-vendor-card {
+  padding: 0;
+}
+
+.settings-vendor-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px 10px;
+}
+
+.settings-vendor-title {
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.settings-vendor-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 16px 12px;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.settings-vendor-meta code {
+  color: var(--text);
+  font-family: "Roboto Mono", monospace;
+}
+
+.settings-vendor-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 16px 14px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.settings-vendor-copy {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.settings-vendor-copy:hover {
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.settings-vendor-copy span {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.settings-vendor-copy code {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--text);
+  font-family: "Roboto Mono", monospace;
+  font-size: 12px;
+  text-align: right;
+}
+
+.settings-vendor-note {
+  margin-top: 4px;
+}
+
 /* --- Model list --- */
 .settings-model-list {
   display: flex;
@@ -404,6 +505,7 @@
   background: rgba(var(--overlay-rgb), 0.03);
   font-size: 13px;
   color: var(--text-secondary);
+  text-align: left;
   border: 1px solid var(--border-subtle);
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
@@ -432,6 +534,7 @@
 .settings-model-name {
   font-size: 13px;
   font-weight: 500;
+  text-align: left;
 }
 
 .settings-model-desc {
@@ -439,6 +542,7 @@
   color: var(--text-dimmer);
   line-height: 1.4;
   font-weight: 400;
+  text-align: left;
 }
 
 .settings-model-item.active .settings-model-desc {
@@ -906,4 +1010,3 @@
   line-height: 1.45;
   margin-top: 2px;
 }
-

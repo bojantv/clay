@@ -515,7 +515,8 @@
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 4px 0;
-  min-width: 220px;
+  width: min(360px, calc(100vw - 24px));
+  min-width: 300px;
   max-height: min(600px, calc(100vh - 120px));
   overflow-y: auto;
   box-shadow: 0 4px 16px rgba(var(--shadow-rgb), 0.4);
@@ -523,6 +524,98 @@
 }
 
 #config-popover.hidden { display: none; }
+
+.config-popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px 4px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.config-popover-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+.config-switch-vendor-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.config-switch-vendor-btn:hover {
+  background: var(--sidebar-hover);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.config-provider-route-menu {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.config-provider-route-menu.hidden {
+  display: none;
+}
+
+.config-provider-route-item {
+  display: block;
+  width: 100%;
+  padding: 8px 9px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.config-provider-route-item:hover {
+  background: rgba(var(--overlay-rgb),0.05);
+  color: var(--text);
+}
+
+.config-provider-route-item.disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.config-provider-route-item.disabled:hover {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.config-provider-route-title {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.config-provider-route-desc {
+  display: block;
+  margin-top: 2px;
+  color: var(--text-dimmer);
+  font-size: 11px;
+  line-height: 1.3;
+  white-space: normal;
+}
+
+.config-provider-route-status {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
 
 .config-section {
   padding: 6px 0 2px;
@@ -566,6 +659,29 @@
 
 .config-radio-item:hover { background: rgba(var(--overlay-rgb),0.05); color: var(--text); }
 .config-radio-item.active { color: var(--accent); font-weight: 600; }
+.config-radio-item.has-desc {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  white-space: normal;
+  line-height: 1.25;
+}
+.config-radio-name {
+  font-size: 13px;
+  width: 100%;
+  text-align: left;
+}
+.config-radio-desc {
+  color: var(--text-dimmer);
+  font-size: 11px;
+  font-weight: 400;
+  width: 100%;
+  text-align: left;
+}
+.config-radio-item.active .config-radio-desc {
+  color: var(--text-muted);
+}
 
 /* Locked picker items (Codex GUI sessions after the first message: model
    is bound to the thread, picks would be silently ignored). Active model
@@ -616,6 +732,16 @@
 .config-segment-btn:hover {
   color: var(--text-secondary);
   background: rgba(var(--overlay-rgb),0.04);
+}
+
+.config-segment-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.config-segment-btn:disabled:hover {
+  color: var(--text-muted);
+  background: none;
 }
 
 .config-segment-btn.active {
@@ -893,9 +1019,12 @@
     max-height: 60vh;
   }
 
+  #config-popover {
+    min-width: 0;
+    width: calc(100vw - 24px);
+  }
+
   /* Config chip: icon-only on mobile */
   #config-chip .config-chip-icon { display: inline; width: 14px; height: 14px; }
   #config-chip-label { display: none; }
 }
-
-

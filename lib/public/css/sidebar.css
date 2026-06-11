@@ -885,6 +885,44 @@
   vertical-align: middle;
 }
 
+/* Vendor dot — small colored indicator for non-Claude sessions */
+.session-vendor-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+.session-vendor-dot.codex { background: #4a9eff; }
+.session-vendor-dot.claude { background: #da7756; }
+.session-vendor-dot.processing {
+  box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.14);
+  animation: vendor-dot-pulse 1.1s ease-in-out infinite;
+}
+.session-vendor-dot.claude.processing {
+  box-shadow: 0 0 0 2px rgba(218, 119, 86, 0.16);
+}
+.session-vendor-dot.codex.io {
+  box-shadow: 0 0 7px #4a9eff;
+  opacity: 0.45;
+}
+.session-vendor-dot.claude.io {
+  box-shadow: 0 0 7px #da7756;
+  opacity: 0.45;
+}
+@keyframes vendor-dot-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.42;
+    transform: scale(0.78);
+  }
+}
+
 /* IO blink on session processing dot */
 .session-item .session-processing.io,
 .mate-session-item .session-processing.io {
@@ -1236,6 +1274,13 @@
 
 .session-ctx-item .lucide { width: 14px; height: 14px; flex-shrink: 0; }
 .session-ctx-item:hover { background: rgba(var(--overlay-rgb), 0.05); }
+.session-ctx-item.disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.session-ctx-item.disabled:hover {
+  background: transparent;
+}
 
 .session-ctx-item.session-ctx-delete { color: var(--error); }
 .session-ctx-item.session-ctx-delete:hover { background: var(--error-8); }

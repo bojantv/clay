@@ -419,6 +419,50 @@
   margin: -8px 0 20px;
 }
 
+.ps-vendor-tabs {
+  display: inline-flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.ps-vendor-tab {
+  border: 0;
+  border-right: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 18px;
+  cursor: pointer;
+}
+
+.ps-vendor-tab:last-child {
+  border-right: 0;
+}
+
+.ps-vendor-tab.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.ps-vendor-panel {
+  display: none;
+}
+
+.ps-vendor-panel.active {
+  display: block;
+}
+
+.settings-model-item.disabled,
+.settings-btn-option:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
 /* MCP Servers Modal */
 #mcp-modal { position: fixed; inset: 0; z-index: 300; display: flex; align-items: center; justify-content: center; }
 #mcp-modal.hidden { display: none; }
