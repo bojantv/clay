@@ -49,6 +49,67 @@ function openUrl(url) {
   } catch (e) {}
 }
 
+function printHelp() {
+  var command = path.basename(process.argv[1] || "clay-server");
+  if (command === "cli.js") {
+    command = "node bin/cli.js";
+  }
+  var lines = [
+    "",
+    "Usage:",
+    "  " + command + " [options]",
+    "  " + command + " --add <path>",
+    "  " + command + " --remove <path>",
+    "  " + command + " --list",
+    "",
+    "Common:",
+    "  -h, --help                  Show this help.",
+    "  -p, --port <port>           Port to listen on. Default: 2633, or 2635 with --dev.",
+    "  --host, --bind <address>    Address to bind to. Default: all interfaces.",
+    "  --dev                       Use the dev daemon/config, enable debug, and skip update checks.",
+    "  --debug                     Run with debug logging and show the debug panel in the web UI.",
+    "  --watch, -w                 Watch the daemon and restart it after crashes.",
+    "  --headless                  Start the daemon and exit immediately. Implies --yes.",
+    "  -y, --yes                   Skip interactive setup prompts and accept defaults.",
+    "",
+    "Security and access:",
+    "  --pin <pin>                 Set a 6-digit PIN during non-interactive setup.",
+    "  --multi-user                Start in multi-user mode.",
+    "  --os-users                  Enable OS-level user isolation on Linux. Requires --multi-user and root.",
+    "",
+    "HTTPS and certificates:",
+    "  --no-https                  Disable HTTPS.",
+    "  --local-cert                Prefer local mkcert certificates and suppress the migration notice.",
+    "  --builtin-cert              Use Clay's bundled certificate even when mkcert is installed.",
+    "",
+    "Automation:",
+    "  --dangerously-skip-permissions",
+    "                              Start Claude sessions with permission prompts bypassed.",
+    "  --full-auto                 Start all new sessions in full automation mode.",
+    "                              Implies --dangerously-skip-permissions.",
+    "                              Claude default: bypass permissions.",
+    "                              Codex defaults: approval=never, sandbox=danger-full-access.",
+    "",
+    "Project management:",
+    "  --add <path>                Add a project directory to the running daemon.",
+    "  --remove <path>             Remove a project directory from the running daemon.",
+    "  --list                      List projects registered in the running daemon.",
+    "",
+    "Daemon control:",
+    "  --shutdown                  Shut down the running daemon.",
+    "  --restart                   Restart the running daemon.",
+    "  --no-update, --skip-update  Skip the startup update check.",
+    "",
+    "Examples:",
+    "  " + command + " --dev -p 7292",
+    "  " + command + " --dev -p 7292 --full-auto",
+    "  " + command + " --headless --yes --pin 123456",
+    "  " + command + " --add .",
+    "",
+  ];
+  console.log(lines.join("\n"));
+}
+
 var args = process.argv.slice(2);
 var port = _isDev ? 2635 : 2633;
 var useHttps = true;
@@ -64,6 +125,7 @@ var addPath = null;
 var removePath = null;
 var listMode = false;
 var dangerouslySkipPermissions = false;
+var fullAutoMode = false;
 var headlessMode = false;
 var watchMode = false;
 var host = null;
@@ -117,36 +179,15 @@ for (var i = 0; i < args.length; i++) {
     autoYes = true;
   } else if (args[i] === "--dangerously-skip-permissions") {
     dangerouslySkipPermissions = true;
+  } else if (args[i] === "--full-auto") {
+    fullAutoMode = true;
+    dangerouslySkipPermissions = true;
   } else if (args[i] === "--multi-user") {
     multiUserMode = true;
   } else if (args[i] === "--os-users") {
     osUsersMode = true;
   } else if (args[i] === "-h" || args[i] === "--help") {
-    console.log("Usage: clay-server [-p|--port <port>] [--host <address>] [--no-https] [--no-update] [--debug] [-y|--yes] [--pin <pin>] [--shutdown] [--restart]");
-    console.log("       clay-server --add <path>     Add a project to the running daemon");
-    console.log("       clay-server --remove <path>  Remove a project from the running daemon");
-    console.log("       clay-server --list            List registered projects");
-    console.log("");
-    console.log("Options:");
-    console.log("  -p, --port <port>  Port to listen on (default: 2633)");
-    console.log("  --host <address>   Address to bind to (default: 0.0.0.0)");
-    console.log("  --no-https         Disable HTTPS (enabled by default)");
-    console.log("  --local-cert       Use local certificate (mkcert), suppress migration notice");
-    console.log("  --builtin-cert    Use builtin certificate even if mkcert is installed");
-    console.log("  --no-update        Skip auto-update check on startup");
-    console.log("  --debug            Enable debug panel in the web UI");
-    console.log("  -y, --yes          Skip interactive prompts (accept defaults)");
-    console.log("  --pin <pin>        Set 6-digit PIN (use with --yes)");
-    console.log("  --shutdown         Shut down the running relay daemon");
-    console.log("  --restart          Restart the running relay daemon");
-    console.log("  --add <path>       Add a project directory (use '.' for current)");
-    console.log("  --remove <path>    Remove a project directory");
-    console.log("  --list             List all registered projects");
-    console.log("  --headless         Start daemon and exit immediately (implies --yes)");
-    console.log("  --multi-user       Start in multi-user mode (use with --yes for headless)");
-    console.log("  --os-users         Enable OS-level user isolation (Linux, requires root + --multi-user)");
-    console.log("  --dangerously-skip-permissions");
-    console.log("                     Bypass all permission prompts");
+    printHelp();
     process.exit(0);
   }
 }
@@ -1418,6 +1459,7 @@ function setup(callback) {
             existingCfg.osUsers = true;
             existingCfg.setupCompleted = true;
             if (dangerouslySkipPermissions) existingCfg.dangerouslySkipPermissions = true;
+            if (fullAutoMode) existingCfg.fullAutoMode = true;
             saveConfig(existingCfg);
             log(sym.bar);
             log(sym.warn + "  " + a.yellow + "OS user isolation requires root." + a.reset);
@@ -1540,6 +1582,7 @@ async function forkDaemon(mode, keepAwake, extraProjects, addCwd, wantOsUsers) {
     headless: headlessMode,
     keepAwake: keepAwake,
     dangerouslySkipPermissions: dangerouslySkipPermissions,
+    fullAutoMode: fullAutoMode,
     osUsers: wantOsUsers || osUsersMode,
     mode: mode || "single",
     setupCompleted: true,
@@ -1710,6 +1753,7 @@ async function devMode(mode, keepAwake, existingPinHash, wantOsUsers) {
     debug: true,
     keepAwake: keepAwake || false,
     dangerouslySkipPermissions: dangerouslySkipPermissions,
+    fullAutoMode: fullAutoMode,
     mode: mode || "single",
     setupCompleted: true,
     projects: allProjects,
@@ -2775,10 +2819,14 @@ var currentVersion = require("../package.json").version;
       if (savedConfig && savedConfig.port) port = savedConfig.port;
       if (savedConfig && savedConfig.host) host = savedConfig.host;
       if (savedConfig && savedConfig.dangerouslySkipPermissions) dangerouslySkipPermissions = true;
+      if (fullAutoMode) dangerouslySkipPermissions = true;
 
       if (autoYes) {
         console.log("  " + sym.done + "  Auto-accepted disclaimer");
         console.log("  " + sym.done + "  Mode: " + savedMode);
+        if (fullAutoMode) {
+          console.log("  " + sym.warn + "  " + a.yellow + "Full auto mode enabled" + a.reset);
+        }
         if (dangerouslySkipPermissions) {
           console.log("  " + sym.warn + "  " + a.yellow + "Skip permissions mode enabled" + a.reset);
         }
