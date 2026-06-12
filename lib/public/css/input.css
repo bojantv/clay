@@ -670,6 +670,76 @@
   position: relative;
 }
 
+#queued-message-bar {
+  max-width: var(--content-width);
+  margin: 0 auto 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#queued-message-bar.hidden {
+  display: none;
+}
+
+.queued-message-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-alt);
+  box-shadow: 0 2px 10px rgba(var(--shadow-rgb), 0.16);
+}
+
+.queued-message-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.queued-message-title {
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.queued-message-preview {
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.queued-message-steer {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.queued-message-steer:hover {
+  background: var(--sidebar-hover);
+}
+
+.queued-message-steer .lucide {
+  width: 13px;
+  height: 13px;
+}
+
 #input-row {
   display: flex;
   flex-direction: column;
