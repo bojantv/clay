@@ -1031,6 +1031,29 @@
     width: calc(100vw - 24px);
   }
 
+  .session-info-popover {
+    left: 12px !important;
+    right: 12px;
+    width: auto;
+    min-width: 0;
+    max-width: calc(100vw - 24px);
+    box-sizing: border-box;
+    padding: 10px 12px;
+  }
+
+  .session-info-popover .info-row {
+    align-items: flex-start;
+  }
+
+  .session-info-popover .info-label {
+    min-width: 64px;
+  }
+
+  .session-info-popover .info-value {
+    min-width: 0;
+    flex: 1;
+  }
+
   /* Config chip: icon-only on mobile */
   #config-chip .config-chip-icon { display: inline; width: 14px; height: 14px; }
   #config-chip-label { display: none; }
