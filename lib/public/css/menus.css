@@ -497,6 +497,13 @@
 
 #config-chip .lucide { width: 10px; height: 10px; }
 #config-chip .config-chip-icon { display: none; }
+#config-chip-label {
+  display: inline-block;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
 
 @media (max-width: 1000px) {
   #config-chip .config-chip-icon { display: inline-flex; width: 16px; height: 16px; }
