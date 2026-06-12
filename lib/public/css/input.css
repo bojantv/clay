@@ -740,6 +740,30 @@
   height: 13px;
 }
 
+.queued-message-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.queued-message-clear:hover {
+  background: rgba(var(--overlay-rgb), 0.06);
+  color: var(--text);
+}
+
+.queued-message-clear .lucide {
+  width: 14px;
+  height: 14px;
+}
+
 #input-row {
   display: flex;
   flex-direction: column;
