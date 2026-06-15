@@ -28,6 +28,7 @@ Create task launcher files under the project:
 ```
 
 Dashboards can call that URL with a JSON body containing `token`, `recipe`, `issue`, and `vendor`.
+Use `https://` in the URL when the Clay server is running with TLS.
 
 ## Commands
 
