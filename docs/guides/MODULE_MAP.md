@@ -191,4 +191,5 @@ module.exports = { attachExample: attachExample };
 - [NO-GOD-OBJECTS.md](./NO-GOD-OBJECTS.md) for architectural principles (why and how we keep modules small)
 - [MCP-IMPLEMENTATION.md](./MCP-IMPLEMENTATION.md) for MCP server architecture (local + extension-bridged)
 - [CODEX-INTEGRATION.md](./CODEX-INTEGRATION.md) for Codex-specific patterns, gotchas, and testing checklist
+- [TASK_LAUNCHERS.md](./TASK_LAUNCHERS.md) for project-defined task launcher recipes and `/launch`
 - [REFACTORING_ROADMAP.md](../roadmaps/completed/REFACTORING_ROADMAP.md) for decomposition history
