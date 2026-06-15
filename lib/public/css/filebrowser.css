@@ -921,6 +921,111 @@
   display: block;
 }
 
+.ps-dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.ps-dashboard-header .settings-btn-sm,
+.ps-dashboard-command-actions .settings-btn-sm {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ps-dashboard-header .lucide,
+.ps-dashboard-command-actions .lucide {
+  width: 14px;
+  height: 14px;
+}
+
+.ps-dashboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 16px 16px;
+}
+
+.ps-dashboard-card {
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.ps-dashboard-title-row {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.ps-dashboard-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.ps-dashboard-command {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px;
+}
+
+.ps-dashboard-command + .ps-dashboard-command {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.ps-dashboard-command-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.ps-dashboard-command-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.ps-dashboard-command-line {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--bg-alt);
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: pre;
+}
+
+.ps-dashboard-command-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.ps-dashboard-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.ps-dashboard-toggle input {
+  margin: 0;
+  accent-color: var(--accent);
+}
+
 @media (max-width: 1023px) {
   #project-settings {
     position: fixed;
@@ -993,6 +1098,15 @@
 
   .project-settings-close-col .server-settings-close-btn span {
     display: none;
+  }
+
+  .ps-dashboard-command {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ps-dashboard-command-actions {
+    justify-content: space-between;
   }
 }
 

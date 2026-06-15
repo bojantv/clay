@@ -692,6 +692,7 @@
             <optgroup label="Config">
               <option value="instructions">Instructions</option>
               <option value="environment">Environment</option>
+              <option value="dashboards">Dashboards</option>
             </optgroup>
           </select>
           <div class="server-settings-nav-items">
@@ -701,6 +702,7 @@
             <div class="settings-nav-category">Config</div>
             <button class="settings-nav-item" data-section="instructions"><span>Instructions</span></button>
             <button class="settings-nav-item" data-section="environment"><span>Environment</span></button>
+            <button class="settings-nav-item" data-section="dashboards"><span>Dashboards</span></button>
           </div>
         </div>
       </div>
@@ -794,6 +796,20 @@
               </div>
               <div class="ps-env-list" id="ps-shared-env-list">
                 <!-- rows rendered by JS -->
+              </div>
+            </div>
+          </div>
+          <!-- Dashboards -->
+          <div class="ps-section" data-section="dashboards">
+            <h2>Dashboards</h2>
+            <p class="ps-section-desc">View and run project-configured dashboard commands. Clay only runs these commands; the project owns what they do.</p>
+            <div class="settings-card">
+              <div class="ps-dashboard-header">
+                <span class="ps-save-status" id="ps-dashboard-status"></span>
+                <button class="settings-btn-sm" id="ps-dashboard-refresh-btn"><i data-lucide="refresh-cw"></i> Refresh</button>
+              </div>
+              <div class="ps-dashboard-list" id="ps-dashboard-list">
+                <div class="settings-hint">Loading...</div>
               </div>
             </div>
           </div>
