@@ -50,6 +50,18 @@ Open a session, pick a vendor. Switch sessions, pick the other. Clay's adapter l
 
 All your projects live in the sidebar. Jump between them in one click, see live status across each, run agents in several at once. No more `cd ~/work/foo && tmux attach && ...`. One Clay daemon hosts every repo on your machine and gives you a single pane of glass over all of them.
 
+### Start work from GitHub issues
+
+Projects can define task launchers under `.clay/tasks/` to turn GitHub issues into ready-to-run Clay sessions. A launcher can fetch matching issues, skip work already in progress, render a project-owned prompt template, choose Claude, Codex, or GitHub Copilot, and start one session per issue.
+
+```text
+/launch preview github-bug assigned:me type:bug
+/launch start github-bug issue:1782 vendor:claude
+/launch start github-bug assigned:me type:bug limit:3
+```
+
+Project dashboards can also call Clay's local task-launch API to add "Start in Claude" or "Start in Codex" buttons next to each work item. See [docs/guides/TASK_LAUNCHERS.md](docs/guides/TASK_LAUNCHERS.md) for the recipe format, dashboard API, and completion/archive rules.
+
 ### Mates: AI teammates with persistent memory
 
 Mates are AI personas with their own CLAUDE.md, knowledge files, and memory that compounds across sessions. They learn your stack, your conventions, your decision history. @mention them mid-session, DM them directly, or drop them into a debate. **They don't flatter you. They push back.**

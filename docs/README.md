@@ -8,7 +8,8 @@ docs/
 │   ├── STATE_CONVENTIONS.md            State management patterns
 │   ├── CLIENT_MODULE_DEPS.md           Client store/ws-ref/import patterns
 │   ├── NO-GOD-OBJECTS.md               Architectural rules to prevent regression
-│   └── MCP-IMPLEMENTATION.md           MCP connection architecture + debugging
+│   ├── MCP-IMPLEMENTATION.md           MCP connection architecture + debugging
+│   └── TASK_LAUNCHERS.md               Project-defined task recipes, GitHub issue launchers, dashboard launch API
 ├── roadmaps/
 │   ├── completed/
 │   │   ├── REFACTORING_ROADMAP.md      Codebase decomposition (PR-01~42)
