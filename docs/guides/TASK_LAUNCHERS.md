@@ -42,6 +42,7 @@ Create task launcher files under the project:
     "state": "open",
     "assigned": "me",
     "type": "bug",
+    "skipProjectStatuses": ["🔄 In progress"],
     "titleExcludePrefixes": ["BE:"],
     "labels": {
       "exclude": ["backend", "legacy"]
