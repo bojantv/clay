@@ -132,13 +132,44 @@ Projects can start or regenerate local dashboards when the Clay project context 
   "dashboards": [
     {
       "name": "triage",
-      "command": "python3",
-      "args": ["localAIConfig/generate-triage-html.py"],
-      "cwd": ".",
-      "onServerStart": true
+      "commands": [
+        {
+          "name": "refresh",
+          "command": "python3",
+          "args": ["localAIConfig/refresh-triage-dashboard.py"],
+          "cwd": ".",
+          "onServerStart": true
+        },
+        {
+          "name": "serve",
+          "command": "python3",
+          "args": ["-m", "http.server", "8765", "--directory", "localAIConfig"],
+          "cwd": ".",
+          "onServerStart": true,
+          "detached": true
+        }
+      ]
     }
   ]
 }
 ```
 
 Commands run from the project directory unless `cwd` is provided. `cwd` must stay inside the project.
+Clay only starts configured commands; project-specific refresh logic, API calls, filters, and dashboard generation stay in the project-owned command.
+
+The older single-command form is still supported:
+
+```json
+{
+  "dashboards": [
+    {
+      "name": "triage",
+      "command": "python3",
+      "args": ["-m", "http.server", "8765", "--directory", "localAIConfig"],
+      "cwd": ".",
+      "onServerStart": true,
+      "detached": true
+    }
+  ]
+}
+```
