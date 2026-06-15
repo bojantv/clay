@@ -16,6 +16,19 @@ Create task launcher files under the project:
 
 `config.json` is optional. Each other `.json` file is a launcher recipe. A matching Markdown file can be used as the first prompt template.
 
+`config.json` can also expose a token-gated local launch API for project dashboards:
+
+```json
+{
+  "launchApi": {
+    "token": "change-this-local-token",
+    "url": "http://127.0.0.1:7292/p/webapp/api/task-launch"
+  }
+}
+```
+
+Dashboards can call that URL with a JSON body containing `token`, `recipe`, `issue`, and `vendor`.
+
 ## Commands
 
 ```text
