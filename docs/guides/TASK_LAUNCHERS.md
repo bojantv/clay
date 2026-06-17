@@ -124,7 +124,7 @@ WORKFLOW_COMPLETE: issue_shipped
 
 When Clay sees that marker in a launched task session and `archiveSession` is true, it archives the session after the successful turn completes.
 
-For shipping-style workflows, Clay can also archive after the next assistant turn when the user sends a completion phrase. Configure `completion.closeOnUserMessages` with project-specific phrases, or omit it to use the defaults: `mark as done`, `mark it done`, `mark done`, `ship it`, and exact `done`.
+For shipping-style workflows, Clay can also arm completion when the user sends a completion phrase. Configure `completion.closeOnUserMessages` with project-specific phrases, or omit it to use the defaults: `mark as done`, `mark it done`, `mark done`, `ship it`, and exact `done`. If the recipe has a `completion.marker`, Clay still waits for that marker before archiving so the session can finish the configured workflow first. Recipes without a marker fall back to archiving after the next assistant turn.
 
 This is still scoped to task-launched sessions only, and only applies when the recipe has `archiveSession` or `closeSession` enabled.
 
