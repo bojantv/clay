@@ -30,6 +30,15 @@ Create task launcher files under the project:
 Dashboards can call that URL with a JSON body containing `token`, `recipe`, `issue`, and `vendor`.
 Use `https://` in the URL when the Clay server is running with TLS.
 
+The endpoint is gated by both the Clay auth session and the `launchApi.token`
+(constant-time compared). When a request targets a specific `issue`, the
+recipe's `filter` (label/assignee/`skipProjectStatuses`) is intentionally **not**
+applied — naming an explicit issue is treated as a deliberate request to launch
+that exact issue regardless of its project status. The filters only apply when
+listing/launching issues in bulk (no `issue` given). Issue bodies are untrusted
+input and are interpolated into the launched session's prompt, which inherits
+the project's automation mode.
+
 ## Commands
 
 ```text
