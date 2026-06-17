@@ -8,52 +8,63 @@
 // Sessions whose ID is in the keep list are left as-is; all others get hidden:true
 // added to their meta line. Daemon must be stopped before --apply.
 
-const fs = require("fs");
-const path = require("path");
-const os = require("os");
+var fs = require("fs");
+var path = require("path");
+var os = require("os");
 
-const root = path.join(os.homedir(), ".clay", "sessions");
-const keepFile = path.join(__dirname, "keep-list.txt");
-const apply = process.argv.includes("--apply");
+var root = path.join(os.homedir(), ".clay", "sessions");
+var keepFile = path.join(__dirname, "keep-list.txt");
+var apply = process.argv.includes("--apply");
 
 if (!fs.existsSync(keepFile)) {
-  console.error(`Missing ${keepFile}. Create it with one session ID per line.`);
+  console.error("Missing " + keepFile + ". Create it with one session ID per line.");
   process.exit(1);
 }
 
-const keep = new Set(
-  fs
-    .readFileSync(keepFile, "utf8")
-    .split("\n")
-    .map((l) => l.trim())
-    .filter((l) => l && !l.startsWith("#"))
-);
+var keep = new Set();
+var keepLines = fs.readFileSync(keepFile, "utf8").split("\n");
+for (var ki = 0; ki < keepLines.length; ki++) {
+  var l = keepLines[ki].trim();
+  if (l && !l.startsWith("#")) keep.add(l);
+}
 
-console.log(`Keep list: ${keep.size} ids`);
+console.log("Keep list: " + keep.size + " ids");
 
-let scanned = 0,
-  willHide = 0,
-  alreadyHidden = 0,
-  kept = 0;
+// Canonical session id: prefer meta.cliSessionId, else the filename WITHOUT the
+// .jsonl suffix. Must match clear-today-yesterday.js and the keep-list.
+function sessionIdFor(meta, filename) {
+  return meta.cliSessionId || filename.replace(/\.jsonl$/, "");
+}
 
-for (const proj of fs.readdirSync(root)) {
-  const dir = path.join(root, proj);
-  if (!fs.statSync(dir).isDirectory()) continue;
-  for (const f of fs.readdirSync(dir)) {
+var scanned = 0;
+var willHide = 0;
+var alreadyHidden = 0;
+var kept = 0;
+
+var projects = fs.readdirSync(root);
+for (var pi = 0; pi < projects.length; pi++) {
+  var dir = path.join(root, projects[pi]);
+  try {
+    if (!fs.statSync(dir).isDirectory()) continue;
+  } catch (e) { continue; }
+  var files = fs.readdirSync(dir);
+  for (var fi = 0; fi < files.length; fi++) {
+    var f = files[fi];
     if (!f.endsWith(".jsonl")) continue;
-    const fp = path.join(dir, f);
+    var fp = path.join(dir, f);
     scanned++;
-    const content = fs.readFileSync(fp, "utf8");
-    const nl = content.indexOf("\n");
-    const firstLine = nl === -1 ? content : content.slice(0, nl);
-    const rest = nl === -1 ? "" : content.slice(nl);
-    let meta;
+    var content;
+    try { content = fs.readFileSync(fp, "utf8"); } catch (e) { continue; }
+    var nl = content.indexOf("\n");
+    var firstLine = nl === -1 ? content : content.slice(0, nl);
+    var rest = nl === -1 ? "" : content.slice(nl);
+    var meta;
     try {
       meta = JSON.parse(firstLine);
     } catch (e) {
       continue;
     }
-    const id = meta.cliSessionId || f.replace(".jsonl", "");
+    var id = sessionIdFor(meta, f);
     if (keep.has(id)) {
       kept++;
       continue;
@@ -70,8 +81,8 @@ for (const proj of fs.readdirSync(root)) {
   }
 }
 
-console.log(`Scanned: ${scanned}`);
-console.log(`Keep matches: ${kept}`);
-console.log(`Already hidden: ${alreadyHidden}`);
-console.log(`${apply ? "Hidden" : "Would hide"}: ${willHide}`);
-if (!apply) console.log(`\nDry run. Re-run with --apply to write changes.`);
+console.log("Scanned: " + scanned);
+console.log("Keep matches: " + kept);
+console.log("Already hidden: " + alreadyHidden);
+console.log((apply ? "Hidden" : "Would hide") + ": " + willHide);
+if (!apply) console.log("\nDry run. Re-run with --apply to write changes.");
