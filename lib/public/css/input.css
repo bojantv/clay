@@ -664,6 +664,15 @@
   background: transparent;
 }
 
+/* While a queued-message menu is open, lift the input area into its own
+   stacking context so the upward-opening popup paints above the message
+   transcript (#messages is position:relative, so it otherwise paints over the
+   statically-positioned input area). Below info-panels (50) and mobile-nav (200). */
+#input-area.queued-menu-open {
+  position: relative;
+  z-index: 30;
+}
+
 #input-wrapper {
   max-width: var(--content-width);
   margin: 0 auto;
@@ -876,7 +885,7 @@
   border-radius: 10px;
   background: var(--bg-alt);
   box-shadow: 0 8px 24px rgba(var(--shadow-rgb), 0.25);
-  z-index: 30;
+  z-index: 50;
 }
 
 .queued-message-menu-item {
