@@ -48,6 +48,7 @@ Wires all modules, sets up session manager and SDK bridge, dispatches messages.
 | `project-http.js` | All HTTP routes: image serving, file upload, push, skills, git status, info |
 | `project-image.js` | `hydrateImageRefs`, `saveImageFile`, image directory setup |
 | `project-file-watch.js` | File and directory fs.watch wrappers |
+| `project-task-sources.js` | Source fetchers for project task launcher recipes |
 | `sdk-bridge.js` | SDK bridge coordinator: createSDKBridge factory, worker lifecycle, query stream, tool permissions, mention sessions |
 | `sdk-skill-discovery.js` | Skill directory scanning, shell segment splitting, SDK/filesystem skill merging |
 | `safe-bash-commands.js` | **Single source of truth** for auto-approved bash commands. Consumed by sdk-bridge.js (`isSafeBashSegment`) and claude-hook-installer.js (`buildClayBashAllowPatterns`) - do not duplicate command lists elsewhere |

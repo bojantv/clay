@@ -171,6 +171,8 @@ Projects can start or regenerate local dashboards when the Clay project context 
 Commands run from the project directory unless `cwd` is provided. `cwd` must stay inside the project.
 Clay only starts configured commands; project-specific refresh logic, API calls, filters, and dashboard generation stay in the project-owned command.
 
+In multi-user mode, dashboard startup commands run only when the daemon config has `"dashboardAutoStart": true`. Single-user mode keeps dashboard startup enabled by default.
+
 The older single-command form is still supported:
 
 ```json
