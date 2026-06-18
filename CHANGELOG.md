@@ -1,3 +1,31 @@
+# [2.44.0](https://github.com/chadbyte/clay/compare/v2.43.0...v2.44.0) (2026-06-18)
+
+
+### Features
+
+* **sessions:** default Claude sessions to GUI and tidy Chat settings ([#366](https://github.com/chadbyte/clay/issues/366)) ([e25e1b9](https://github.com/chadbyte/clay/commit/e25e1b9f97042cfcb134171b326ac8c900db1f92))
+
+# [2.44.0-beta.1](https://github.com/chadbyte/clay/compare/v2.43.0...v2.44.0-beta.1) (2026-06-18)
+
+
+### Features
+
+* **sessions:** default Claude sessions to GUI and tidy Chat settings ([#366](https://github.com/chadbyte/clay/issues/366)) ([e25e1b9](https://github.com/chadbyte/clay/commit/e25e1b9f97042cfcb134171b326ac8c900db1f92))
+
+# [2.43.0](https://github.com/chadbyte/clay/compare/v2.42.0...v2.43.0) (2026-06-18)
+
+
+### Features
+
+* **tls:** fetch *.d.clay.studio cert at runtime instead of baking into npm ([#365](https://github.com/chadbyte/clay/issues/365)) ([8e02d5c](https://github.com/chadbyte/clay/commit/8e02d5c46115350c7407252012b62c7657b304d3))
+
+# [2.43.0-beta.1](https://github.com/chadbyte/clay/compare/v2.42.0...v2.43.0-beta.1) (2026-06-18)
+
+
+### Features
+
+* **tls:** fetch *.d.clay.studio cert at runtime instead of baking into npm ([#365](https://github.com/chadbyte/clay/issues/365)) ([8e02d5c](https://github.com/chadbyte/clay/commit/8e02d5c46115350c7407252012b62c7657b304d3))
+
 # [2.42.0](https://github.com/chadbyte/clay/compare/v2.41.1...v2.42.0) (2026-06-08)
 
 
