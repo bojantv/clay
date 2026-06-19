@@ -230,3 +230,47 @@ test("task launch result reports stable session id separately from local router 
   assert.strictEqual(result.storageId, "stable-storage-id");
   assert.strictEqual(result.cliSessionId, null);
 });
+
+test("auto-resume turns do not bump lastActivity, genuine input does", function () {
+  var tmpHome = fs.mkdtempSync(path.join(os.tmpdir(), "clay-session-"));
+  var projectDir = fs.mkdtempSync(path.join(os.tmpdir(), "clay-project-"));
+  var oldClayHome = process.env.CLAY_HOME;
+  process.env.CLAY_HOME = tmpHome;
+
+  try {
+    delete require.cache[require.resolve("../lib/config")];
+    delete require.cache[require.resolve("../lib/sessions")];
+
+    var utils = require("../lib/utils");
+    var sessionsDir = path.join(tmpHome, "sessions", utils.encodeCwd(projectDir));
+    fs.mkdirSync(sessionsDir, { recursive: true });
+    var lines = [
+      JSON.stringify({ type: "meta", cliSessionId: "sess-1", storageId: "sess-1", title: "Session", createdAt: 1000, vendor: "claude", mode: "gui" }),
+      JSON.stringify({ type: "user_message", text: "hi", _ts: 1000 }),
+    ];
+    fs.writeFileSync(path.join(sessionsDir, "sess-1.jsonl"), lines.join("\n") + "\n");
+
+    var sm = require("../lib/sessions").createSessionManager({ cwd: projectDir, send: function () {} });
+    var session = sm.sessions.get(1);
+    var baseline = session.lastActivity;
+
+    // A synthetic auto-resume turn marks the session; its appends must NOT move
+    // the session up the recency-sorted list (the "sessions keep jumping" bug).
+    session._suppressActivityBump = true;
+    sm.appendToSessionFile(session, { type: "user_message", text: "↻ Resuming the interrupted response", _ts: Date.now() });
+    sm.appendToSessionFile(session, { type: "delta", text: "resumed work", _ts: Date.now() });
+    assert.strictEqual(session.lastActivity, baseline, "auto-resume appends must not bump lastActivity");
+
+    // Genuine user input clears the flag, restoring normal recency bumping.
+    session._suppressActivityBump = false;
+    sm.appendToSessionFile(session, { type: "user_message", text: "real message", _ts: Date.now() });
+    assert.ok(session.lastActivity > baseline, "genuine input must bump lastActivity");
+  } finally {
+    if (typeof oldClayHome === "string") process.env.CLAY_HOME = oldClayHome;
+    else delete process.env.CLAY_HOME;
+    delete require.cache[require.resolve("../lib/config")];
+    delete require.cache[require.resolve("../lib/sessions")];
+    fs.rmSync(tmpHome, { recursive: true, force: true });
+    fs.rmSync(projectDir, { recursive: true, force: true });
+  }
+});
