@@ -30,6 +30,8 @@ test("loads missing handoff context for GitHub Copilot sessions", function () {
         createdAt: Date.now(),
         vendor: "github-copilot",
       }),
+      JSON.stringify({ type: "user_message", text: "Original Claude-side context", _ts: Date.now() }),
+      JSON.stringify({ type: "delta", text: "Work completed before switching", _ts: Date.now() }),
       JSON.stringify({ type: "vendor_switched", fromVendor: "claude", toVendor: "github-copilot", _ts: Date.now() }),
       JSON.stringify({ type: "user_message", text: "Continue with Copilot", _ts: Date.now() }),
       JSON.stringify({ type: "session_id", cliSessionId: "copilot-runtime-1", _ts: Date.now() }),
@@ -45,7 +47,8 @@ test("loads missing handoff context for GitHub Copilot sessions", function () {
 
     assert.strictEqual(session.vendor, "github-copilot");
     assert.ok(session.handoffContext, "handoff context should be recovered for Copilot");
-    assert.ok(session.handoffContext.indexOf("Continue with Copilot") !== -1);
+    assert.ok(session.handoffContext.indexOf("Original Claude-side context") !== -1);
+    assert.ok(session.handoffContext.indexOf("Continue with Copilot") === -1);
 
     var savedMeta = JSON.parse(fs.readFileSync(path.join(sessionsDir, storageId + ".jsonl"), "utf8").split("\n")[0]);
     assert.strictEqual(savedMeta.handoffContextRecovered, true);
@@ -136,6 +139,63 @@ test("saved session metadata omits volatile local id", function () {
 
     assert.strictEqual(meta.storageId, "stable-storage-id");
     assert.strictEqual(Object.prototype.hasOwnProperty.call(meta, "localId"), false);
+  } finally {
+    if (typeof oldClayHome === "string") process.env.CLAY_HOME = oldClayHome;
+    else delete process.env.CLAY_HOME;
+    delete require.cache[require.resolve("../lib/config")];
+    delete require.cache[require.resolve("../lib/sessions")];
+    fs.rmSync(tmpHome, { recursive: true, force: true });
+    fs.rmSync(projectDir, { recursive: true, force: true });
+  }
+});
+
+test("persisted restart interruption does not auto-resume again", function () {
+  var tmpHome = fs.mkdtempSync(path.join(os.tmpdir(), "clay-session-"));
+  var projectDir = fs.mkdtempSync(path.join(os.tmpdir(), "clay-project-"));
+  var oldClayHome = process.env.CLAY_HOME;
+  process.env.CLAY_HOME = tmpHome;
+
+  try {
+    delete require.cache[require.resolve("../lib/config")];
+    delete require.cache[require.resolve("../lib/sessions")];
+
+    var utils = require("../lib/utils");
+    var encoded = utils.encodeCwd(projectDir);
+    var sessionsDir = path.join(tmpHome, "sessions", encoded);
+    fs.mkdirSync(sessionsDir, { recursive: true });
+
+    var storageId = "interrupted-session";
+    var ts = Date.now() - 1000;
+    var lines = [
+      JSON.stringify({
+        type: "meta",
+        cliSessionId: storageId,
+        storageId: storageId,
+        title: "Interrupted once",
+        createdAt: ts,
+        vendor: "codex",
+      }),
+      JSON.stringify({ type: "user_message", text: "do work", _ts: ts }),
+      JSON.stringify({ type: "thinking_start", _ts: ts + 1 }),
+      JSON.stringify({
+        type: "info",
+        text: "Session was interrupted by a Clay restart. Clay will continue it when you reopen this session.",
+        _ts: ts + 2,
+      }),
+      JSON.stringify({ type: "done", code: 1, _ts: ts + 3 }),
+      JSON.stringify({ type: "thinking_stop", _ts: ts + 4 }),
+    ];
+    fs.writeFileSync(path.join(sessionsDir, storageId + ".jsonl"), lines.join("\n") + "\n");
+
+    var createSessionManager = require("../lib/sessions").createSessionManager;
+    var sm = createSessionManager({
+      cwd: projectDir,
+      send: function () {},
+    });
+    var session = sm.sessions.get(1);
+
+    assert.strictEqual(session.interruptedByRestart, true);
+    assert.strictEqual(session.restartResumeEligible, false);
   } finally {
     if (typeof oldClayHome === "string") process.env.CLAY_HOME = oldClayHome;
     else delete process.env.CLAY_HOME;
