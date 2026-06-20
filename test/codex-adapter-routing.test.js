@@ -63,9 +63,14 @@ test("Codex context usage uses current context tokens, not cumulative total toke
     method: "thread/tokenUsage/updated",
     params: {
       tokenUsage: {
-        total: {
+        last: {
           inputTokens: 247000,
           outputTokens: 1200,
+          totalTokens: 248200,
+        },
+        total: {
+          inputTokens: 760000,
+          outputTokens: 12000,
           totalTokens: 772000,
         },
         modelContextWindow: 258400,
