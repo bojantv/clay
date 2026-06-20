@@ -1581,6 +1581,7 @@
 @media (hover: none) {
   .session-more-btn { opacity: 1; }
   .msg-copy-hint { opacity: 1; }
+  .msg-assistant-time { opacity: 1; }
   .msg-user[data-uuid] .bubble::after { display: none; }
   .mermaid-diagram::after { display: none; }
 }

@@ -238,7 +238,7 @@
 .msg-assistant {
   position: relative;
   max-width: var(--content-width);
-  margin: 0 auto 12px;
+  margin: 0 auto 28px;
   padding: 4px 20px;
   border-radius: 12px;
   transition: background 0.15s;
@@ -273,6 +273,27 @@
 .msg-assistant:hover .msg-copy-hint { opacity: 1; }
 .msg-assistant.copy-primed .msg-copy-hint { opacity: 1; color: var(--accent); }
 .msg-assistant.copy-done .msg-copy-hint { opacity: 1; color: var(--success); }
+
+/* Date/time label for assistant messages (mirrors user message time) */
+.msg-assistant-time {
+  position: absolute;
+  bottom: -18px;
+  left: 20px;
+  font-size: 11px;
+  color: var(--text-dimmer);
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.msg-assistant:hover .msg-assistant-time { opacity: 1; }
+
+/* In DM/wide layouts the header already shows name + time, so skip the
+   bottom label to avoid duplicate timestamps. */
+body.mate-dm-active .msg-assistant-time,
+body.wide-view .msg-assistant-time { display: none; }
 
 /* ==========================================================================
    Markdown Content
