@@ -331,3 +331,77 @@ test("hidden Claude sessions remain importable when CLI descriptor parsing fails
     fs.rmSync(projectDir, { recursive: true, force: true });
   }
 });
+
+test("historical provider session ids block orphan CLI re-adoption", function () {
+  var tmpHome = fs.mkdtempSync(path.join(os.tmpdir(), "clay-session-"));
+  var projectDir = fs.mkdtempSync(path.join(os.tmpdir(), "clay-project-"));
+  var oldClayHome = process.env.CLAY_HOME;
+  var originalHomedir = os.homedir;
+  process.env.CLAY_HOME = path.join(tmpHome, ".clay");
+  os.homedir = function () { return tmpHome; };
+
+  try {
+    delete require.cache[require.resolve("../lib/config")];
+    delete require.cache[require.resolve("../lib/tombstones")];
+    delete require.cache[require.resolve("../lib/sessions")];
+
+    var utils = require("../lib/utils");
+    var encoded = utils.encodeCwd(projectDir);
+    var sessionsDir = path.join(process.env.CLAY_HOME, "sessions", encoded);
+    var claudeDir = path.join(tmpHome, ".claude", "projects", encoded);
+    fs.mkdirSync(sessionsDir, { recursive: true });
+    fs.mkdirSync(claudeDir, { recursive: true });
+
+    var oldClaudeId = "040c3bf9-03bb-47bc-9913-52b8c45c9773";
+    var handoffStorageId = "6cace36b-1990-4bfa-9f59-e2f87ec86e0a";
+    var copilotRuntimeId = "23a7aa61-79b0-4497-a689-3b0e80831bc9";
+    var createdAt = 1760000000000;
+
+    var clayLines = [
+      JSON.stringify({
+        type: "meta",
+        cliSessionId: copilotRuntimeId,
+        storageId: handoffStorageId,
+        title: "Hidden handoff session",
+        createdAt: createdAt,
+        vendor: "github-copilot",
+        hidden: true,
+      }),
+      JSON.stringify({ type: "user_message", text: "Original Claude work", _ts: createdAt }),
+      JSON.stringify({ type: "session_id", cliSessionId: oldClaudeId, _ts: createdAt + 1 }),
+      JSON.stringify({ type: "vendor_switched", fromVendor: "claude", toVendor: "github-copilot", _ts: createdAt + 2 }),
+      JSON.stringify({ type: "session_id", cliSessionId: copilotRuntimeId, _ts: createdAt + 3 }),
+    ];
+    fs.writeFileSync(path.join(sessionsDir, handoffStorageId + ".jsonl"), clayLines.join("\n") + "\n");
+
+    var nativeLines = [
+      JSON.stringify({ type: "user", timestamp: "2026-06-18T11:40:00.000Z", message: { role: "user", content: "Repo: old Claude task" } }),
+      JSON.stringify({ type: "assistant", timestamp: "2026-06-18T11:40:01.000Z", message: { role: "assistant", content: [{ type: "text", text: "Working" }] } }),
+    ];
+    fs.writeFileSync(path.join(claudeDir, oldClaudeId + ".jsonl"), nativeLines.join("\n") + "\n");
+
+    var sm = require("../lib/sessions").createSessionManager({ cwd: projectDir, send: function () {} });
+    var matchingSessions = [];
+    sm.sessions.forEach(function (session) {
+      if (session.cliSessionId === oldClaudeId || session.storageId === oldClaudeId) {
+        matchingSessions.push(session);
+      }
+    });
+    var importable = sm.listAdoptableCliSessions("claude").filter(function (item) {
+      return item.cliSessionId === oldClaudeId;
+    });
+
+    assert.strictEqual(sm.sessions.size, 1);
+    assert.strictEqual(matchingSessions.length, 0);
+    assert.strictEqual(importable.length, 0);
+  } finally {
+    if (typeof oldClayHome === "string") process.env.CLAY_HOME = oldClayHome;
+    else delete process.env.CLAY_HOME;
+    os.homedir = originalHomedir;
+    delete require.cache[require.resolve("../lib/config")];
+    delete require.cache[require.resolve("../lib/tombstones")];
+    delete require.cache[require.resolve("../lib/sessions")];
+    fs.rmSync(tmpHome, { recursive: true, force: true });
+    fs.rmSync(projectDir, { recursive: true, force: true });
+  }
+});
