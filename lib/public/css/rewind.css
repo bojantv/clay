@@ -177,6 +177,27 @@
 
 .sys-msg.error .sys-text { color: var(--error); }
 
+/* Auto-recovery notice (stalled stream resumed / dropped connection retried).
+   Rendered as a subtle green pill with a refresh glyph so it reads as a
+   self-healing event rather than an error. */
+.sys-msg.recovery .sys-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-style: normal;
+  color: var(--success);
+  background: color-mix(in srgb, var(--success) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--success) 30%, transparent);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+.sys-msg.recovery .sys-text::before {
+  content: "\21bb"; /* ↻ refresh glyph */
+  font-weight: 700;
+  line-height: 1;
+}
+
 /* ==========================================================================
    Context Card (browser tab preview shown between user msg and assistant response)
    ========================================================================== */
