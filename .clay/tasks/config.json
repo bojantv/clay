@@ -1,0 +1,7 @@
+{
+  "autoLaunch": {
+    "enabled": false,
+    "recipeId": "assigned-to-me",
+    "cron": "*/5 * * * *"
+  }
+}

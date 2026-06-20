@@ -1,0 +1,34 @@
+{
+  "id": "assigned-to-me",
+  "name": "Auto-start issues assigned to me",
+  "source": {
+    "provider": "github",
+    "kind": "issue",
+    "repo": "bojantv/clay",
+    "fetchLimit": 100
+  },
+  "filter": {
+    "state": "open",
+    "assigned": "me"
+  },
+  "launch": {
+    "defaultLimit": 10
+  },
+  "prompt": {
+    "template": "assigned-to-me.md",
+    "variables": {
+      "confidence_threshold": "80"
+    }
+  },
+  "session": {
+    "title": "#{number} {title}",
+    "vendor": "claude",
+    "model": "default"
+  },
+  "completion": {
+    "marker": "CLAY_TASK_COMPLETE",
+    "needsInputMarker": "CLAY_NEEDS_INPUT",
+    "closeSession": true,
+    "archiveSession": true
+  }
+}

@@ -189,3 +189,45 @@ The older single-command form is still supported:
   ]
 }
 ```
+
+## Auto-launch (scheduled, hands-off)
+
+Clay can poll a recipe on a schedule and automatically start a session for each
+new matching item — no manual `/launch` click needed. This is driven by
+`project-auto-launch.js` and configured in `.clay/tasks/config.json`:
+
+```json
+{
+  "autoLaunch": {
+    "enabled": true,
+    "recipeId": "assigned-to-me",
+    "cron": "*/5 * * * *"
+  }
+}
+```
+
+- `enabled` — master switch (default `false`).
+- `recipeId` — the recipe under `.clay/tasks/` to run.
+- `cron` — 5-field cron expression (checked every 30s by the loop registry).
+
+On each tick the recipe is fetched and every matching item that does **not**
+already have a session (dedup by `recipeId` + issue number/URL) gets a new
+session started automatically. The schedule is stored as an `autolaunch` record
+in the loop registry, so it survives restarts. Changes to the config are picked
+up on server restart.
+
+### Confidence gate
+
+The bundled `assigned-to-me` recipe pairs auto-launch with a confidence gate in
+its prompt template. The agent rates its confidence that it understands the issue
+and how to solve it:
+
+- **≥ threshold** (default 80%): it works the issue autonomously and ends with
+  the `CLAY_TASK_COMPLETE` marker (the session then auto-closes).
+- **< threshold**: it posts what it understood plus its questions, ends with the
+  `CLAY_NEEDS_INPUT` marker, and waits for a reply.
+
+Auto-launched sessions suppress the normal per-turn push notification; they only
+ping you (in-session notification + mobile push) when the agent emits
+`CLAY_NEEDS_INPUT`. Configure the markers via the recipe's `completion` block
+(`marker`, `needsInputMarker`).
