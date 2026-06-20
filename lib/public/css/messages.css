@@ -169,9 +169,10 @@
 .msg-actions {
   display: flex;
   align-items: center;
-  gap: 2px;
-  min-height: 28px;
+  gap: 3px;
+  min-height: 32px;
   padding-top: 2px;
+  margin-right: -3px;
 }
 
 .msg-action-time {
@@ -181,6 +182,7 @@
   opacity: 0;
   transition: opacity 0.15s;
   user-select: none;
+  pointer-events: none;
   font-variant-numeric: tabular-nums;
 }
 
@@ -194,8 +196,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
   border: none;
   background: transparent;
   color: var(--text-dimmer);
@@ -203,23 +206,32 @@
   border-radius: 6px;
   padding: 0;
   opacity: 0;
+  touch-action: manipulation;
   transition: opacity 0.15s, color 0.15s, background 0.15s;
 }
 
-.msg-action-btn .lucide { width: 14px; height: 14px; }
+.msg-action-btn .lucide {
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+}
 
 .msg-action-btn:hover {
   color: var(--text);
   background: rgba(var(--overlay-rgb), 0.08);
 }
 
-.msg-user:hover .msg-action-btn:not(.msg-action-hidden) { opacity: 1; }
+.msg-user:hover .msg-action-btn:not(.msg-action-hidden) {
+  opacity: 1;
+}
 
 /* Hidden actions (fork/rewind) — created but not shown */
 .msg-action-btn.msg-action-hidden { display: none; }
 
 @media (pointer: coarse) {
-  .msg-action-btn:not(.msg-action-hidden) { opacity: 1; }
+  .msg-action-btn:not(.msg-action-hidden) {
+    opacity: 1;
+  }
 }
 
 /* --- Assistant message --- */
