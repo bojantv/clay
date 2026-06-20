@@ -213,8 +213,35 @@ new matching item — no manual `/launch` click needed. This is driven by
 On each tick the recipe is fetched and every matching item that does **not**
 already have a session (dedup by `recipeId` + issue number/URL) gets a new
 session started automatically. The schedule is stored as an `autolaunch` record
-in the loop registry, so it survives restarts. Changes to the config are picked
-up on server restart.
+in the loop registry, so it survives restarts.
+
+### Toggle from the UI
+
+The feature can be turned on/off from **User Settings → Behavior →
+"Auto-start assigned issues"**. The toggle round-trips over the project
+WebSocket (`get_auto_launch` / `set_auto_launch` → `auto_launch_state`); the
+server persists `autoLaunch.enabled` to `.clay/tasks/config.json` (merging, so
+other keys like `launchApi` are preserved) and **reconciles the schedule live**
+— no restart needed. Editing `recipeId`/`cron` is still done in the config file.
+
+### Restricting by project status
+
+To only auto-start issues sitting in specific GitHub Project status columns, set
+`filter.includeProjectStatuses` (allow-list). The bundled `assigned-to-me`
+recipe uses:
+
+```json
+"filter": {
+  "state": "open",
+  "assigned": "me",
+  "includeProjectStatuses": ["Backlog", "Dev Complete"]
+}
+```
+
+An issue must currently be in one of the listed statuses to qualify — anything
+"In Progress" or further along (or not on the board at all) is skipped. This
+complements the existing `skipProjectStatuses` exclude-list. Status names must
+match your project's column names exactly (case-insensitive).
 
 ### Confidence gate
 

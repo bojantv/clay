@@ -49,8 +49,8 @@ Wires all modules, sets up session manager and SDK bridge, dispatches messages.
 | `project-image.js` | `hydrateImageRefs`, `saveImageFile`, image directory setup |
 | `project-file-watch.js` | File and directory fs.watch wrappers |
 | `project-task-sources.js` | Source fetchers for project task launcher recipes |
-| `project-task-launcher.js` | `task_launch` | Task launcher engine: load recipes from `.clay/tasks/*.json`, fetch items, spawn sessions. `launchScheduled` (dedup auto-start) + `launchExternal` (HTTP). Confidence-gate completion/needs-input markers |
-| `project-auto-launch.js` | (no WS messages) | Polls a task-launcher recipe on a cron schedule and auto-starts sessions for new matching items. Config in `.clay/tasks/config.json` (`autoLaunch`). Registers an `autolaunch` record in the loop registry; triggered via `onScheduledTrigger` |
+| `project-task-launcher.js` | `task_launch` | Task launcher engine: load recipes from `.clay/tasks/*.json`, fetch items, spawn sessions (`startSessionForItem`, `loadRecipe`, `launchExternal`). Completion/needs-input markers; delegates the needs-input ping via the `onNeedsInput` callback |
+| `project-auto-launch.js` | `get_auto_launch`, `set_auto_launch` (→ `auto_launch_state`) | Scheduled auto-start: `launchScheduled` (fetch + dedup + start), `notifyNeedsInput` (confidence-gate ping). Config in `.clay/tasks/config.json` (`autoLaunch`); registers an `autolaunch` record in the loop registry (triggered via `onScheduledTrigger`); UI toggle round-trips here |
 | `project-session-compaction.js` | Clay-side compacted continuation for provider sessions that are full or wedged |
 | `sdk-bridge.js` | SDK bridge coordinator: createSDKBridge factory, worker lifecycle, query stream, tool permissions, mention sessions |
 | `sdk-skill-discovery.js` | Skill directory scanning, shell segment splitting, SDK/filesystem skill merging |
