@@ -274,3 +274,60 @@ test("auto-resume turns do not bump lastActivity, genuine input does", function 
     fs.rmSync(projectDir, { recursive: true, force: true });
   }
 });
+
+test("hidden Claude sessions remain importable when CLI descriptor parsing fails", function () {
+  var tmpHome = fs.mkdtempSync(path.join(os.tmpdir(), "clay-session-"));
+  var projectDir = fs.mkdtempSync(path.join(os.tmpdir(), "clay-project-"));
+  var oldClayHome = process.env.CLAY_HOME;
+  var originalHomedir = os.homedir;
+  process.env.CLAY_HOME = path.join(tmpHome, ".clay");
+  os.homedir = function () { return tmpHome; };
+
+  try {
+    delete require.cache[require.resolve("../lib/config")];
+    delete require.cache[require.resolve("../lib/sessions")];
+
+    var utils = require("../lib/utils");
+    var encoded = utils.encodeCwd(projectDir);
+    var sessionsDir = path.join(process.env.CLAY_HOME, "sessions", encoded);
+    var claudeDir = path.join(tmpHome, ".claude", "projects", encoded);
+    fs.mkdirSync(sessionsDir, { recursive: true });
+    fs.mkdirSync(claudeDir, { recursive: true });
+
+    var sessionId = "991ad98d-18a4-499c-bd8a-3287a81c36b1";
+    var createdAt = 1760000000000;
+    var title = "Screenshot-backed hidden session";
+    var lines = [
+      JSON.stringify({
+        type: "meta",
+        cliSessionId: sessionId,
+        storageId: sessionId,
+        title: title,
+        createdAt: createdAt,
+        vendor: "claude",
+        hidden: true,
+      }),
+      JSON.stringify({ type: "user_message", text: title, _ts: createdAt }),
+    ];
+    fs.writeFileSync(path.join(sessionsDir, sessionId + ".jsonl"), lines.join("\n") + "\n");
+
+    var largeLine = "{\"type\":\"user\",\"message\":{\"role\":\"user\",\"content\":[{\"type\":\"image\",\"source\":{\"data\":\"" + "x".repeat(70 * 1024) + "\"}}]}}\n";
+    fs.writeFileSync(path.join(claudeDir, sessionId + ".jsonl"), largeLine);
+
+    var sm = require("../lib/sessions").createSessionManager({ cwd: projectDir, send: function () {} });
+    var importable = sm.listAdoptableCliSessions("claude");
+    var found = importable.filter(function (item) { return item.cliSessionId === sessionId; })[0];
+
+    assert.ok(found, "hidden session should still be listed for import");
+    assert.strictEqual(found.hidden, true);
+    assert.strictEqual(found.title, title);
+  } finally {
+    if (typeof oldClayHome === "string") process.env.CLAY_HOME = oldClayHome;
+    else delete process.env.CLAY_HOME;
+    os.homedir = originalHomedir;
+    delete require.cache[require.resolve("../lib/config")];
+    delete require.cache[require.resolve("../lib/sessions")];
+    fs.rmSync(tmpHome, { recursive: true, force: true });
+    fs.rmSync(projectDir, { recursive: true, force: true });
+  }
+});
