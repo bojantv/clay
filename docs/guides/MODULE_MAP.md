@@ -56,6 +56,7 @@ Wires all modules, sets up session manager and SDK bridge, dispatches messages.
 | `sdk-message-queue.js` | Async iterable message queue for streaming input to SDK |
 | `sdk-message-processor.js` | SDK stream event processing (message_start, content_block_*), sub-agent message routing |
 | `codex-defaults.js` | Codex-specific default values (sandbox, approval, web search). **Single source of truth** - do not duplicate elsewhere |
+| `git-accounts.js` | Per-project GitHub account pinning. Lists `gh` CLI accounts and writes/clears a repo-local git credential helper (`gh auth token --user <account>`) so each project pushes/pulls as a chosen account regardless of the globally-active `gh` account. Used by daemon.js relay callbacks (`onListGitAccounts`/`onGetProjectGitAccount`/`onSetProjectGitAccount`); UI in `project-settings.js` |
 | `mates.js` | Mate CRUD, builtin mate management, atomic section enforcement, migration |
 | `mates-prompts.js` | System section enforcers (team, session memory, sticky notes, project registry, debate), marker constants |
 | `mates-knowledge.js` | Common knowledge registry (promote/depromote, cross-mate file sharing) |
