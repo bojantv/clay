@@ -55,3 +55,44 @@ test("Codex import keeps first user prompt even when it starts with injected ins
     fs.rmSync(projectDir, { recursive: true, force: true });
   }
 });
+
+test("CLI session import preserves original message timestamps as _ts", function () {
+  var tmpHome = fs.mkdtempSync(path.join(os.tmpdir(), "clay-cli-ts-"));
+  var projectDir = fs.mkdtempSync(path.join(os.tmpdir(), "clay-project-"));
+  var cliSessions = require("../lib/cli-sessions");
+  var sessionId = "bb167370-2320-4e85-9fb2-116135ea5d56";
+
+  var encoded = cliSessions.encodeCwd(projectDir);
+  var projDir = path.join(tmpHome, ".claude", "projects", encoded);
+  fs.mkdirSync(projDir, { recursive: true });
+
+  var userTs = "2026-05-28T09:42:23.729Z";
+  var asstTs = "2026-05-28T09:42:27.110Z";
+  var lines = [
+    JSON.stringify({ type: "mode", mode: "default" }),
+    JSON.stringify({
+      type: "user",
+      timestamp: userTs,
+      message: { role: "user", content: "Hello from the past" },
+    }),
+    JSON.stringify({
+      type: "assistant",
+      timestamp: asstTs,
+      message: { role: "assistant", content: [{ type: "text", text: "A reply from the past" }] },
+    }),
+  ];
+  fs.writeFileSync(path.join(projDir, sessionId + ".jsonl"), lines.join("\n") + "\n");
+
+  try {
+    var history = cliSessions.readCliSessionHistorySync(tmpHome, projectDir, sessionId);
+
+    assert.strictEqual(history.length, 2);
+    assert.strictEqual(history[0].type, "user_message");
+    assert.strictEqual(history[0]._ts, Date.parse(userTs));
+    assert.strictEqual(history[1].type, "delta");
+    assert.strictEqual(history[1]._ts, Date.parse(asstTs));
+  } finally {
+    fs.rmSync(tmpHome, { recursive: true, force: true });
+    fs.rmSync(projectDir, { recursive: true, force: true });
+  }
+});
