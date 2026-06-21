@@ -1935,7 +1935,8 @@
         <h3>Repository &amp; GitHub account</h3>
         <p class="ralph-hint">Issues are fetched as this account via the <code>gh</code> CLI.</p>
         <label class="ralph-field-label" for="tsw-repo">Repo <span class="ralph-field-req">*</span></label>
-        <input type="text" id="tsw-repo" class="ps-text-input" spellcheck="false" placeholder="owner/name (e.g. trialview/v2)">
+        <input type="text" id="tsw-repo" class="ps-text-input" spellcheck="false" autocomplete="off" placeholder="owner/name (e.g. trialview/v2)" list="tsw-repo-list">
+        <datalist id="tsw-repo-list"></datalist>
         <label class="ralph-field-label" for="tsw-account" style="margin-top:8px;">GitHub account</label>
         <select id="tsw-account" class="settings-select"></select>
         <div class="ralph-hint" id="tsw-discover-status" style="margin-top:8px;"></div>
