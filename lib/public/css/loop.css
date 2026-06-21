@@ -228,7 +228,8 @@
 }
 
 /* Ralph Wizard */
-#ralph-wizard {
+#ralph-wizard,
+#task-setup-wizard {
   position: fixed;
   inset: 0;
   z-index: 300;
@@ -236,7 +237,8 @@
   align-items: center;
   justify-content: center;
 }
-#ralph-wizard.hidden { display: none; }
+#ralph-wizard.hidden,
+#task-setup-wizard.hidden { display: none; }
 
 .ralph-wizard-backdrop {
   position: absolute;
