@@ -10,7 +10,7 @@
   "filter": {
     "state": "open",
     "assigned": "me",
-    "includeProjectStatuses": ["📋 Backlog", "🚀 Ready for development"],
+    "skipProjectStatuses": ["🔧 Dev Complete", "✍️ Ready for production", "✅ Done"],
     "titleExcludePrefixes": ["BE:"],
     "labels": {
       "exclude": ["BE", "backend"]

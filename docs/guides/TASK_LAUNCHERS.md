@@ -226,22 +226,35 @@ other keys like `launchApi` are preserved) and **reconciles the schedule live**
 
 ### Restricting by project status
 
-To only auto-start issues sitting in specific GitHub Project status columns, set
-`filter.includeProjectStatuses` (allow-list). The bundled `assigned-to-me`
-recipe uses:
+Two complementary controls:
+
+- `filter.includeProjectStatuses` — allow-list. The issue must currently be in
+  one of these statuses to qualify.
+- `filter.skipProjectStatuses` — exclude-list. The issue is dropped if it is in
+  any of these statuses.
+
+Status names must match your project's column names **exactly** (case-insensitive,
+**including any emoji prefix** — `gh` returns e.g. `📋 Backlog`, `🔧 Dev Complete`).
+
+The bundled `assigned-to-me` recipe targets `trialview/v2`'s Unified Board and
+follows that workspace's `TRIAGE.local.md` "outstanding" rule — skip the
+done-ish statuses, exclude backend issues:
 
 ```json
 "filter": {
   "state": "open",
   "assigned": "me",
-  "includeProjectStatuses": ["Backlog", "Dev Complete"]
+  "skipProjectStatuses": ["🔧 Dev Complete", "✍️ Ready for production", "✅ Done"],
+  "titleExcludePrefixes": ["BE:"],
+  "labels": { "exclude": ["BE", "backend"] }
 }
 ```
 
-An issue must currently be in one of the listed statuses to qualify — anything
-"In Progress" or further along (or not on the board at all) is skipped. This
-complements the existing `skipProjectStatuses` exclude-list. Status names must
-match your project's column names exactly (case-insensitive).
+Because `assigned: "me"` already scopes to you, the triage rule's "In progress
+only if it's mine" is satisfied automatically. Label exclusion matches a label
+that equals the token, starts with `token-`/`token:`/`token/`/`token `, or (for
+tokens ≥4 chars) contains it — so `backend`, `backend-infra`, and `BE-api` are
+excluded, while `beta` is not.
 
 ### Confidence gate
 
