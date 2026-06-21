@@ -877,14 +877,85 @@
           <!-- Task Launchers -->
           <div class="ps-section" data-section="task-launchers">
             <h2>Task Launchers</h2>
-            <p class="ps-section-desc">Set up or edit the whole issue-tracking workflow: a GitHub issue recipe, the auto-launch schedule, the triage instructions, and a launch API for an "outstanding issues" dashboard. The wizard discovers your project board automatically and writes every file for you.</p>
-            <div class="settings-card">
+            <p class="ps-section-desc">The GitHub issue recipe, auto-launch schedule, triage instructions, and the launch API for an "outstanding issues" dashboard. A new project is set up with a guided wizard; a configured project shows its current settings here so you can edit them.</p>
+            <!-- New project: guided wizard entry -->
+            <div class="settings-card hidden" id="tsw-setup-prompt">
               <div class="settings-card-body">
                 <div class="settings-label">Guided setup</div>
-                <div class="settings-hint">On a new project it scaffolds everything from scratch; on a configured one it opens pre-filled with the current connection so you can edit it. Covers repo &amp; account, board status discovery, filters, agent split and schedule — writing <code>.clay/tasks/</code> recipes, <code>config.json</code>, and <code>localAIConfig/TRIAGE.local.md</code> — plus a ready prompt to build your dashboard website.</div>
+                <div class="settings-hint">No task launcher is configured for this project yet. The wizard discovers your project board automatically and writes every file for you — recipes, <code>config.json</code>, <code>localAIConfig/TRIAGE.local.md</code>, and a ready prompt to build your dashboard website.</div>
                 <div class="ps-textarea-actions">
-                  <button type="button" class="settings-btn-sm" id="ps-task-launcher-create"><i data-lucide="wand-2"></i> Set up / edit task launcher</button>
+                  <button type="button" class="settings-btn-sm" id="ps-task-launcher-create"><i data-lucide="wand-2"></i> Set up task launcher</button>
                 </div>
+              </div>
+            </div>
+            <!-- Configured project: inline editable settings -->
+            <div class="settings-card hidden" id="tsw-inline">
+              <div class="settings-card-body">
+                <div class="settings-field">
+                  <label class="settings-label" for="tsi-recipe-name">Recipe</label>
+                  <input type="text" id="tsi-recipe-name" class="ps-text-input" spellcheck="false" placeholder="Auto-start issues assigned to me">
+                  <div class="settings-hint">Recipe id: <code id="tsi-recipe-id-label">assigned-to-me</code> — edits write <code>.clay/tasks/&lt;id&gt;.json</code>.</div>
+                </div>
+                <div class="settings-field">
+                  <label class="settings-label" for="tsi-repo">Repo</label>
+                  <input type="text" id="tsi-repo" class="ps-text-input" spellcheck="false" placeholder="owner/name">
+                </div>
+                <div class="settings-field">
+                  <label class="settings-label" for="tsi-account">GitHub account</label>
+                  <select id="tsi-account" class="settings-select"></select>
+                </div>
+                <div class="settings-field">
+                  <label class="settings-label" for="tsi-type">Issue type</label>
+                  <select id="tsi-type" class="settings-select">
+                    <option value="">Any</option>
+                    <option value="bug">Bug</option>
+                    <option value="feature">Feature</option>
+                    <option value="legacy">Legacy</option>
+                  </select>
+                </div>
+                <div class="settings-field">
+                  <label class="settings-label" for="tsi-assigned">Assignee</label>
+                  <select id="tsi-assigned" class="settings-select">
+                    <option value="me">Assigned to me</option>
+                    <option value="any">Anyone</option>
+                  </select>
+                </div>
+                <div class="settings-field">
+                  <label class="settings-label" for="tsi-skip-statuses">Skip board statuses (comma-separated)</label>
+                  <input type="text" id="tsi-skip-statuses" class="ps-text-input" spellcheck="false" placeholder="🔧 Dev Complete, ✅ Done">
+                  <div class="settings-hint">Issues in these board columns are treated as done and skipped. To rediscover columns from the board, use the wizard.</div>
+                </div>
+                <div class="settings-field">
+                  <label class="settings-label" for="tsi-exclude-labels">Exclude labels (comma-separated)</label>
+                  <input type="text" id="tsi-exclude-labels" class="ps-text-input" spellcheck="false" placeholder="BE, backend">
+                </div>
+                <div class="settings-field">
+                  <label class="settings-label" for="tsi-title-prefixes">Exclude title prefixes (comma-separated)</label>
+                  <input type="text" id="tsi-title-prefixes" class="ps-text-input" spellcheck="false" placeholder="BE:">
+                </div>
+                <div class="settings-field">
+                  <label class="settings-label" for="tsi-vendor">Agent split <span id="tsi-vendor-label">70% Claude · 30% Codex</span></label>
+                  <input type="range" id="tsi-vendor" class="us-range-input" min="0" max="100" step="10" value="70">
+                </div>
+                <div class="settings-field">
+                  <label class="settings-label" for="tsi-cron">Poll schedule (cron)</label>
+                  <input type="text" id="tsi-cron" class="ps-text-input" spellcheck="false" placeholder="*/5 * * * *">
+                </div>
+                <div class="settings-field">
+                  <label class="settings-label" for="tsi-confidence">Confidence threshold (%)</label>
+                  <input type="number" id="tsi-confidence" class="ps-text-input" min="0" max="100" value="80">
+                </div>
+                <div class="settings-field">
+                  <label class="settings-label" for="tsi-dash-port">Dashboard port</label>
+                  <input type="number" id="tsi-dash-port" class="ps-text-input" value="8765">
+                </div>
+                <label class="tsw-check-row"><input type="checkbox" id="tsi-enabled"> Auto-launch enabled</label>
+                <label class="tsw-check-row"><input type="checkbox" id="tsi-create-manual"> Keep a manual <code>/launch</code> recipe</label>
+                <div class="ps-textarea-actions">
+                  <button type="button" class="settings-btn-sm" id="tsi-save">Save changes</button>
+                  <span class="ps-save-status" id="tsi-status"></span>
+                </div>
+                <div class="settings-hint">Editing here updates the recipe and <code>config.json</code> only — it never overwrites <code>TRIAGE.local.md</code> or your prompt templates. Use the wizard to rebuild from scratch.</div>
               </div>
             </div>
           </div>
