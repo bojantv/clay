@@ -784,16 +784,16 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 4px 12px;
-  border-radius: 10px;
+  padding: 1px 12px;
+  border-radius: 8px;
   font-size: 12px;
+  line-height: 1.4;
   color: var(--text-muted);
   cursor: default;
   pointer-events: none;
-  border-left: 2px solid var(--border-subtle, var(--border));
-  margin: 2px 8px;
-  background: transparent;
-  opacity: 0.6;
+  border-left: 3px solid var(--accent);
+  margin: 1px 8px;
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
 }
 
 .session-countdown-name {
@@ -807,9 +807,9 @@
 
 .session-countdown-badge {
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
-  color: var(--text-muted);
+  color: var(--accent);
   flex-shrink: 0;
 }
 
