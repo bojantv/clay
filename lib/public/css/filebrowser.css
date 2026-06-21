@@ -427,14 +427,14 @@
   margin-bottom: 6px;
 }
 /* The config card wraps .settings-field rows that already self-pad (like the
-   Profile/Instructions sections), so don't double-inset them — just pad the
-   trailing Save row to align with the rows above. */
+   Profile/Instructions sections), so don't double-inset them. */
 #project-settings #ps-auto-launch-config {
   padding: 0;
 }
-#project-settings #ps-auto-launch-config .settings-allow-actions {
-  padding: 0 16px 14px;
+#project-settings #ps-auto-launch-config .ps-textarea-actions {
+  margin-top: 0;
 }
+.ps-save-status.error { color: var(--error); }
 
 /* Automation section: agent-split slider + setup checklist */
 #project-settings .us-range-input {
