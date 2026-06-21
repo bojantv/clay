@@ -4,13 +4,17 @@
   "source": {
     "provider": "github",
     "kind": "issue",
-    "repo": "bojantv/clay",
+    "repo": "trialview/v2",
     "fetchLimit": 100
   },
   "filter": {
     "state": "open",
     "assigned": "me",
-    "includeProjectStatuses": ["Backlog", "Dev Complete"]
+    "includeProjectStatuses": ["📋 Backlog", "🚀 Ready for development"],
+    "titleExcludePrefixes": ["BE:"],
+    "labels": {
+      "exclude": ["BE", "backend"]
+    }
   },
   "launch": {
     "defaultLimit": 10

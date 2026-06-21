@@ -1051,11 +1051,26 @@
             <label class="settings-toggle-row">
               <div>
                 <span class="settings-label">Auto-start assigned issues</span>
-                <div class="settings-hint">Automatically start a Clay session for GitHub issues assigned to you (project-wide). The agent works autonomously when confident and pings you when it needs input. Polls every few minutes.</div>
+                <div class="settings-hint">Automatically start a Clay session for GitHub issues assigned to you (project-wide). The agent works autonomously when confident and pings you when it needs input.</div>
               </div>
               <input type="checkbox" id="us-auto-launch">
               <span class="toggle-track"><span class="toggle-thumb"></span></span>
             </label>
+            <div class="settings-card-body" id="us-auto-launch-config">
+              <div class="settings-field">
+                <label class="settings-label" for="us-auto-launch-recipe">Recipe</label>
+                <select id="us-auto-launch-recipe" class="settings-select"></select>
+              </div>
+              <div class="settings-field">
+                <label class="settings-label" for="us-auto-launch-cron">Poll schedule (cron)</label>
+                <input type="text" id="us-auto-launch-cron" class="us-text-input" spellcheck="false" placeholder="*/5 * * * *">
+                <div class="settings-hint">5-field cron. Examples: <code>*/5 * * * *</code> (every 5 min), <code>*/15 * * * *</code> (every 15 min), <code>0 * * * *</code> (hourly).</div>
+              </div>
+              <div class="settings-allow-actions">
+                <button type="button" id="us-auto-launch-save" class="settings-action">Save</button>
+                <span id="us-auto-launch-status" class="settings-allow-status"></span>
+              </div>
+            </div>
           </div>
           <div class="settings-card settings-allow-card">
             <div class="settings-card-body">
