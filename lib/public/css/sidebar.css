@@ -796,14 +796,6 @@
   opacity: 0.6;
 }
 
-/* Imminent (final stretch): bring back the prominent, attention-getting look. */
-.session-countdown-item.imminent {
-  border-left: 3px solid var(--accent);
-  background: color-mix(in srgb, var(--accent) 6%, transparent);
-  opacity: 1;
-  animation: countdown-pulse 2s ease-in-out infinite;
-}
-
 .session-countdown-name {
   flex: 1;
   overflow: hidden;
@@ -819,16 +811,6 @@
   font-variant-numeric: tabular-nums;
   color: var(--text-muted);
   flex-shrink: 0;
-}
-
-.session-countdown-item.imminent .session-countdown-badge {
-  font-weight: 700;
-  color: var(--accent);
-}
-
-@keyframes countdown-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
 }
 
 .session-item {
