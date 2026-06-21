@@ -419,6 +419,23 @@
   margin: -8px 0 20px;
 }
 
+/* Automation section: match the padded card look used elsewhere */
+#project-settings .settings-card-body {
+  padding: 14px 16px;
+}
+#project-settings .settings-card-body > .settings-label:first-child {
+  margin-bottom: 6px;
+}
+/* The config card wraps .settings-field rows that already self-pad (like the
+   Profile/Instructions sections), so don't double-inset them — just pad the
+   trailing Save row to align with the rows above. */
+#project-settings #ps-auto-launch-config {
+  padding: 0;
+}
+#project-settings #ps-auto-launch-config .settings-allow-actions {
+  padding: 0 16px 14px;
+}
+
 /* Automation section: agent-split slider + setup checklist */
 #project-settings .us-range-input {
   width: 100%;
