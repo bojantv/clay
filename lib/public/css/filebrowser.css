@@ -432,6 +432,13 @@
   color: var(--text-dim, var(--text));
 }
 
+.ps-recipe-desc:empty { display: none; }
+.ps-recipe-desc {
+  margin-top: 6px;
+  color: var(--text);
+  font-style: italic;
+}
+
 .ps-section-checklist {
   margin: 10px 0 4px;
   padding-left: 20px;

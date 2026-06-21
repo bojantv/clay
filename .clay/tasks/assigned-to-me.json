@@ -1,6 +1,7 @@
 {
   "id": "assigned-to-me",
   "name": "Auto-start issues assigned to me",
+  "description": "Starts a session for each open bug assigned to you that is not yet In Progress or further along, excluding backend (BE:) issues. The agent works autonomously at ≥80% confidence and pauses for input otherwise.",
   "source": {
     "provider": "github",
     "kind": "issue",
