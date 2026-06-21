@@ -206,6 +206,56 @@ test("persisted restart interruption does not auto-resume again", function () {
   }
 });
 
+test("stale interrupted turn anchors recency to stall time, not load time", function () {
+  // Regression: a session whose turn was left open long ago must not look
+  // "freshly interrupted" on every daemon restart. restartInterruptedAt should
+  // reflect when work actually stalled (last event), so the auto-resume recency
+  // window can reject it — otherwise it auto-continues a stale turn forever.
+  var tmpHome = fs.mkdtempSync(path.join(os.tmpdir(), "clay-session-"));
+  var projectDir = fs.mkdtempSync(path.join(os.tmpdir(), "clay-project-"));
+  var oldClayHome = process.env.CLAY_HOME;
+  process.env.CLAY_HOME = tmpHome;
+
+  try {
+    delete require.cache[require.resolve("../lib/config")];
+    delete require.cache[require.resolve("../lib/sessions")];
+
+    var utils = require("../lib/utils");
+    var encoded = utils.encodeCwd(projectDir);
+    var sessionsDir = path.join(tmpHome, "sessions", encoded);
+    fs.mkdirSync(sessionsDir, { recursive: true });
+
+    var storageId = "stale-open-turn";
+    var staleTs = Date.now() - (2 * 24 * 60 * 60 * 1000); // two days ago
+    var lines = [
+      JSON.stringify({ type: "meta", cliSessionId: storageId, storageId: storageId, title: "Stale", createdAt: staleTs, vendor: "codex" }),
+      JSON.stringify({ type: "user_message", text: "do work", _ts: staleTs }),
+      JSON.stringify({ type: "thinking_start", _ts: staleTs + 1 }),
+      JSON.stringify({ type: "tool_start", _ts: staleTs + 2 }),
+      // No terminal "done": the turn was left open when work stalled days ago.
+    ];
+    fs.writeFileSync(path.join(sessionsDir, storageId + ".jsonl"), lines.join("\n") + "\n");
+
+    var createSessionManager = require("../lib/sessions").createSessionManager;
+    var sm = createSessionManager({ cwd: projectDir, send: function () {} });
+    var session = sm.sessions.get(1);
+
+    // It is a genuinely open turn (so structurally eligible)...
+    assert.strictEqual(session.restartResumeEligible, true);
+    // ...but the recency stamp is anchored to the stall point days ago, far
+    // outside any sane auto-resume window — so autoResumeRestartSession declines.
+    assert.ok(Date.now() - session.restartInterruptedAt >= 10 * 60 * 1000,
+      "restartInterruptedAt should reflect stall time (days ago), not load time");
+  } finally {
+    if (typeof oldClayHome === "string") process.env.CLAY_HOME = oldClayHome;
+    else delete process.env.CLAY_HOME;
+    delete require.cache[require.resolve("../lib/config")];
+    delete require.cache[require.resolve("../lib/sessions")];
+    fs.rmSync(tmpHome, { recursive: true, force: true });
+    fs.rmSync(projectDir, { recursive: true, force: true });
+  }
+});
+
 test("task launch result reports stable session id separately from local router id", function () {
   var launcher = require("../lib/project-task-launcher").attachTaskLauncher({
     cwd: process.cwd(),
