@@ -2,7 +2,7 @@
 
 Task launchers let a project define repeatable work starters. Clay owns the generic launcher, while each project owns its own source, filters, prompt, and completion rules.
 
-> **`source.ghAccount`** (optional): pins which authenticated `gh` account is used to fetch issues. Clay runs `gh` with that account's token (`GH_TOKEN` from `gh auth token --user <account>`), so issue fetching is independent of whichever `gh` account is currently active — important if you switch accounts (e.g. for PRs). Without it, the active account is used, and `@me` resolves to that account.
+> **Which `gh` account fetches issues:** by default Clay uses the project's pinned **GitHub account** (Project Settings → Profile → GitHub account), running `gh` with that account's token (`GH_TOKEN` from `gh auth token --user <account>`). This makes fetching independent of whichever `gh` account is currently active — important if you switch accounts (e.g. for PRs), and `@me` resolves to the pinned account. Resolution order: `args.ghAccount` → `source.ghAccount` (optional recipe override) → the project's pinned account → the account git resolves for the repo → the active account.
 
 ## Files
 

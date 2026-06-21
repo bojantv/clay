@@ -865,7 +865,7 @@
                 <div class="settings-label">What you need for this to work</div>
                 <ol class="ps-section-checklist">
                   <li><b>A recipe exists</b> in <code>.clay/tasks/</code> (this project ships <code>assigned-to-me</code>). It sets the repo, the filter (e.g. open bugs assigned to you, not yet In&nbsp;Progress), and the prompt template.</li>
-                  <li><b>GitHub CLI is authenticated</b> — Clay runs <code>gh issue list</code> as you, so <code>gh auth status</code> must resolve to the right account with access to the repo.</li>
+                  <li><b>The right GitHub account is set</b> — issues are fetched as this project's <b>GitHub account</b> (Profile tab). Set it to the account assigned the issues; otherwise Clay falls back to whichever <code>gh</code> account is active.</li>
                   <li><b>Turn the toggle on and Save.</b> Changes apply live; on server restart the schedule is restored from <code>.clay/tasks/config.json</code>.</li>
                 </ol>
                 <div class="settings-hint">When confidence is below the recipe's threshold the session pauses with questions and notifies you; otherwise it completes and closes on its own.</div>
