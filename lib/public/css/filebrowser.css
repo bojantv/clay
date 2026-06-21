@@ -419,6 +419,36 @@
   margin: -8px 0 20px;
 }
 
+/* Automation section: agent-split slider + setup checklist */
+#project-settings .us-range-input {
+  width: 100%;
+  margin: 6px 0 2px;
+  accent-color: var(--accent, #6c8cff);
+  cursor: pointer;
+}
+
+#project-settings #ps-auto-launch-vendor-label {
+  font-weight: 600;
+  color: var(--text-dim, var(--text));
+}
+
+.ps-section-checklist {
+  margin: 10px 0 4px;
+  padding-left: 20px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.ps-section-checklist li { margin-bottom: 8px; }
+.ps-section-checklist li:last-child { margin-bottom: 0; }
+.ps-section-checklist code {
+  font-size: 12px;
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: var(--bg-alt, rgba(127, 127, 127, 0.12));
+}
+
 .ps-vendor-tabs {
   display: inline-flex;
   gap: 0;

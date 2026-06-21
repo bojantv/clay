@@ -693,6 +693,7 @@
               <option value="instructions">Instructions</option>
               <option value="environment">Environment</option>
               <option value="dashboards">Dashboards</option>
+              <option value="automation">Automation</option>
             </optgroup>
           </select>
           <div class="server-settings-nav-items">
@@ -703,6 +704,7 @@
             <button class="settings-nav-item" data-section="instructions"><span>Instructions</span></button>
             <button class="settings-nav-item" data-section="environment"><span>Environment</span></button>
             <button class="settings-nav-item" data-section="dashboards"><span>Dashboards</span></button>
+            <button class="settings-nav-item" data-section="automation"><span>Automation</span></button>
           </div>
         </div>
       </div>
@@ -817,6 +819,53 @@
               </div>
               <div class="ps-dashboard-list" id="ps-dashboard-list">
                 <div class="settings-hint">Loading...</div>
+              </div>
+            </div>
+          </div>
+          <!-- Automation -->
+          <div class="ps-section" data-section="automation">
+            <h2>Automation</h2>
+            <p class="ps-section-desc">Automatically start a Clay session for new GitHub issues assigned to you in this project. The agent reads each issue, works it autonomously when it is confident, and pings you (in‑app + mobile push) only when it needs input.</p>
+            <div class="settings-card">
+              <label class="settings-toggle-row">
+                <div>
+                  <span class="settings-label">Auto-start assigned issues</span>
+                  <div class="settings-hint">Polls on the schedule below and starts a session per matching issue (deduped, so each issue starts once).</div>
+                </div>
+                <input type="checkbox" id="ps-auto-launch">
+                <span class="toggle-track"><span class="toggle-thumb"></span></span>
+              </label>
+              <div class="settings-card-body" id="ps-auto-launch-config">
+                <div class="settings-field">
+                  <label class="settings-label" for="ps-auto-launch-recipe">Recipe</label>
+                  <select id="ps-auto-launch-recipe" class="settings-select"></select>
+                  <div class="settings-hint">Defines which issues qualify and the prompt each session runs. Recipes live in <code>.clay/tasks/*.json</code> in this project.</div>
+                </div>
+                <div class="settings-field">
+                  <label class="settings-label" for="ps-auto-launch-cron">Poll schedule (cron)</label>
+                  <input type="text" id="ps-auto-launch-cron" class="ps-text-input" spellcheck="false" placeholder="*/5 * * * *">
+                  <div class="settings-hint">5-field cron. Examples: <code>*/5 * * * *</code> (every 5 min), <code>*/15 * * * *</code> (every 15 min), <code>0 * * * *</code> (hourly).</div>
+                </div>
+                <div class="settings-field">
+                  <label class="settings-label" for="ps-auto-launch-vendor">Agent split <span id="ps-auto-launch-vendor-label">60% Claude · 40% Codex</span></label>
+                  <input type="range" id="ps-auto-launch-vendor" class="us-range-input" min="0" max="100" step="10" value="60">
+                  <div class="settings-hint">Alternates the coding agent across auto-started sessions. Left = all Codex, right = all Claude.</div>
+                </div>
+                <div class="settings-allow-actions">
+                  <button type="button" id="ps-auto-launch-save" class="settings-action">Save</button>
+                  <span id="ps-auto-launch-status" class="settings-allow-status"></span>
+                </div>
+              </div>
+            </div>
+            <div class="settings-card">
+              <div class="settings-card-body">
+                <div class="settings-label">What you need for this to work</div>
+                <ol class="ps-section-checklist">
+                  <li><b>A recipe exists</b> in <code>.clay/tasks/</code> (this project ships <code>assigned-to-me</code>). It sets the repo, the filter (e.g. open bugs assigned to you, not yet In&nbsp;Progress), and the prompt template.</li>
+                  <li><b>GitHub CLI is authenticated</b> — Clay runs <code>gh issue list</code> as you, so <code>gh auth status</code> must resolve to the right account with access to the repo.</li>
+                  <li><b>Turn the toggle on and Save.</b> Changes apply live; on server restart the schedule is restored from <code>.clay/tasks/config.json</code>.</li>
+                </ol>
+                <div class="settings-hint">When confidence is below the recipe's threshold the session pauses with questions and notifies you; otherwise it completes and closes on its own.</div>
               </div>
             </div>
           </div>
@@ -1046,36 +1095,6 @@
               <input type="checkbox" id="us-claude-open-mode">
               <span class="toggle-track"><span class="toggle-thumb"></span></span>
             </label>
-          </div>
-          <div class="settings-card">
-            <label class="settings-toggle-row">
-              <div>
-                <span class="settings-label">Auto-start assigned issues</span>
-                <div class="settings-hint">Automatically start a Clay session for GitHub issues assigned to you (project-wide). The agent works autonomously when confident and pings you when it needs input.</div>
-              </div>
-              <input type="checkbox" id="us-auto-launch">
-              <span class="toggle-track"><span class="toggle-thumb"></span></span>
-            </label>
-            <div class="settings-card-body" id="us-auto-launch-config">
-              <div class="settings-field">
-                <label class="settings-label" for="us-auto-launch-recipe">Recipe</label>
-                <select id="us-auto-launch-recipe" class="settings-select"></select>
-              </div>
-              <div class="settings-field">
-                <label class="settings-label" for="us-auto-launch-cron">Poll schedule (cron)</label>
-                <input type="text" id="us-auto-launch-cron" class="us-text-input" spellcheck="false" placeholder="*/5 * * * *">
-                <div class="settings-hint">5-field cron. Examples: <code>*/5 * * * *</code> (every 5 min), <code>*/15 * * * *</code> (every 15 min), <code>0 * * * *</code> (hourly).</div>
-              </div>
-              <div class="settings-field">
-                <label class="settings-label" for="us-auto-launch-vendor">Agent split <span id="us-auto-launch-vendor-label">60% Claude · 40% Codex</span></label>
-                <input type="range" id="us-auto-launch-vendor" class="us-range-input" min="0" max="100" step="10" value="60">
-                <div class="settings-hint">Alternates the coding agent for each auto-started session. Left = all Codex, right = all Claude.</div>
-              </div>
-              <div class="settings-allow-actions">
-                <button type="button" id="us-auto-launch-save" class="settings-action">Save</button>
-                <span id="us-auto-launch-status" class="settings-allow-status"></span>
-              </div>
-            </div>
           </div>
           <div class="settings-card settings-allow-card">
             <div class="settings-card-body">
