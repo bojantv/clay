@@ -2,6 +2,8 @@
 
 Task launchers let a project define repeatable work starters. Clay owns the generic launcher, while each project owns its own source, filters, prompt, and completion rules.
 
+> **`source.ghAccount`** (optional): pins which authenticated `gh` account is used to fetch issues. Clay runs `gh` with that account's token (`GH_TOKEN` from `gh auth token --user <account>`), so issue fetching is independent of whichever `gh` account is currently active — important if you switch accounts (e.g. for PRs). Without it, the active account is used, and `@me` resolves to that account.
+
 ## Files
 
 Create task launcher files under the project:
@@ -59,6 +61,7 @@ the project's automation mode.
     "provider": "github",
     "kind": "issues",
     "repo": "trialview/v2",
+    "ghAccount": "bojantv",
     "fetchLimit": 100
   },
   "filter": {

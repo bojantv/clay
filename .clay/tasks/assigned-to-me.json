@@ -6,6 +6,7 @@
     "provider": "github",
     "kind": "issue",
     "repo": "trialview/v2",
+    "ghAccount": "bojantv",
     "fetchLimit": 100
   },
   "filter": {
