@@ -784,15 +784,23 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 12px;
+  padding: 4px 12px;
   border-radius: 10px;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-muted);
   cursor: default;
   pointer-events: none;
-  border-left: 3px solid var(--accent);
+  border-left: 2px solid var(--border-subtle, var(--border));
   margin: 2px 8px;
+  background: transparent;
+  opacity: 0.6;
+}
+
+/* Imminent (final stretch): bring back the prominent, attention-getting look. */
+.session-countdown-item.imminent {
+  border-left: 3px solid var(--accent);
   background: color-mix(in srgb, var(--accent) 6%, transparent);
+  opacity: 1;
   animation: countdown-pulse 2s ease-in-out infinite;
 }
 
@@ -807,10 +815,15 @@
 
 .session-countdown-badge {
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: var(--accent);
+  color: var(--text-muted);
   flex-shrink: 0;
+}
+
+.session-countdown-item.imminent .session-countdown-badge {
+  font-weight: 700;
+  color: var(--accent);
 }
 
 @keyframes countdown-pulse {
