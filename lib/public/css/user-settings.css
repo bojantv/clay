@@ -487,6 +487,18 @@
 }
 
 /* --- Inputs / buttons --- */
+#user-settings .us-range-input {
+  width: 100%;
+  margin: 6px 0 2px;
+  accent-color: var(--accent, #6c8cff);
+  cursor: pointer;
+}
+
+#user-settings #us-auto-launch-vendor-label {
+  font-weight: 600;
+  color: var(--text-dim, var(--text));
+}
+
 #user-settings .us-text-input,
 #user-settings .settings-select,
 #user-settings #settings-pin-input {

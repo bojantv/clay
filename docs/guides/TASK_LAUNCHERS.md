@@ -201,7 +201,8 @@ new matching item — no manual `/launch` click needed. This is driven by
   "autoLaunch": {
     "enabled": true,
     "recipeId": "assigned-to-me",
-    "cron": "*/5 * * * *"
+    "cron": "*/5 * * * *",
+    "vendorWeights": { "claude": 60, "codex": 40 }
   }
 }
 ```
@@ -209,6 +210,14 @@ new matching item — no manual `/launch` click needed. This is driven by
 - `enabled` — master switch (default `false`).
 - `recipeId` — the recipe under `.clay/tasks/` to run.
 - `cron` — 5-field cron expression (checked every 30s by the loop registry).
+- `vendorWeights` — optional. Alternates the coding agent per started session
+  using smooth weighted round-robin (a 60/40 Claude/Codex split interleaves as
+  claude, codex, claude, codex, claude, …). Omit to use the recipe's
+  `session.vendor`. A weight of `0` (or omitting a vendor) runs a single agent.
+
+All of these are editable from the web UI: **Settings → Auto-start assigned
+issues** (toggle, recipe picker, cron, and the Claude/Codex split slider).
+Changes apply live — no restart needed.
 
 On each tick the recipe is fetched and every matching item that does **not**
 already have a session (dedup by `recipeId` + issue number/URL) gets a new

@@ -2,6 +2,7 @@
   "autoLaunch": {
     "enabled": false,
     "recipeId": "assigned-to-me",
-    "cron": "*/5 * * * *"
+    "cron": "*/5 * * * *",
+    "vendorWeights": { "claude": 60, "codex": 40 }
   }
 }

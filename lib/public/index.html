@@ -1066,6 +1066,11 @@
                 <input type="text" id="us-auto-launch-cron" class="us-text-input" spellcheck="false" placeholder="*/5 * * * *">
                 <div class="settings-hint">5-field cron. Examples: <code>*/5 * * * *</code> (every 5 min), <code>*/15 * * * *</code> (every 15 min), <code>0 * * * *</code> (hourly).</div>
               </div>
+              <div class="settings-field">
+                <label class="settings-label" for="us-auto-launch-vendor">Agent split <span id="us-auto-launch-vendor-label">60% Claude · 40% Codex</span></label>
+                <input type="range" id="us-auto-launch-vendor" class="us-range-input" min="0" max="100" step="10" value="60">
+                <div class="settings-hint">Alternates the coding agent for each auto-started session. Left = all Codex, right = all Claude.</div>
+              </div>
               <div class="settings-allow-actions">
                 <button type="button" id="us-auto-launch-save" class="settings-action">Save</button>
                 <span id="us-auto-launch-status" class="settings-allow-status"></span>
