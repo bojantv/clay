@@ -2,6 +2,29 @@
 
 Task launchers let a project define repeatable work starters. Clay owns the generic launcher, while each project owns its own source, filters, prompt, and completion rules.
 
+## Setup wizard (Project Settings → Task Launchers)
+
+Instead of hand-authoring the files below, you can scaffold a complete setup from
+the UI: **Project Settings → Task Launchers → Create task launcher**. The wizard:
+
+1. Asks for the repo + GitHub account.
+2. **Auto-discovers the repo's GitHub Projects v2 board** (project/status-field/option
+   IDs) via `gh api graphql`, so you pick which columns count as "done-ish" instead
+   of copying node IDs by hand.
+3. Collects filters (issue type, assignee, label/title excludes), the Claude/Codex
+   split, the poll cron, and the confidence threshold.
+4. Writes everything: the auto recipe `.json` + prompt `.md` (and an optional manual
+   `/launch` variant), a **merged** `config.json` (`autoLaunch` + a generated
+   `launchApi.token` + a `triage` dashboard serve command), a `localAIConfig/TRIAGE.local.md`
+   starter pre-filled with the discovered board IDs, and `localAIConfig/BUILD_DASHBOARD_PROMPT.md`.
+5. Hands back a ready "paste this to an AI to build your outstanding-issues website"
+   prompt (pre-filled with the repo, launch URL, token, and board IDs).
+
+`config.json` is merged, so existing keys (and any pre-existing `launchApi.token`) are
+preserved, and an existing `TRIAGE.local.md` is never overwritten unless you tick the
+overwrite option. Server side this is handled by `project-task-setup.js`
+(messages `task_setup_accounts` / `task_setup_discover` / `task_setup_scaffold`).
+
 > **Which `gh` account fetches issues:** by default Clay uses the project's pinned **GitHub account** (Project Settings → Profile → GitHub account), running `gh` with that account's token (`GH_TOKEN` from `gh auth token --user <account>`). This makes fetching independent of whichever `gh` account is currently active — important if you switch accounts (e.g. for PRs), and `@me` resolves to the pinned account. Resolution order: `args.ghAccount` → `source.ghAccount` (optional recipe override) → the project's pinned account → the account git resolves for the repo → the active account.
 
 ## Files

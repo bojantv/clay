@@ -694,6 +694,7 @@
               <option value="environment">Environment</option>
               <option value="dashboards">Dashboards</option>
               <option value="automation">Automation</option>
+              <option value="task-launchers">Task Launchers</option>
             </optgroup>
           </select>
           <div class="server-settings-nav-items">
@@ -705,6 +706,7 @@
             <button class="settings-nav-item" data-section="environment"><span>Environment</span></button>
             <button class="settings-nav-item" data-section="dashboards"><span>Dashboards</span></button>
             <button class="settings-nav-item" data-section="automation"><span>Automation</span></button>
+            <button class="settings-nav-item" data-section="task-launchers"><span>Task Launchers</span></button>
           </div>
         </div>
       </div>
@@ -869,6 +871,20 @@
                   <li><b>Turn the toggle on and Save.</b> Changes apply live; on server restart the schedule is restored from <code>.clay/tasks/config.json</code>.</li>
                 </ol>
                 <div class="settings-hint">When confidence is below the recipe's threshold the session pauses with questions and notifies you; otherwise it completes and closes on its own.</div>
+              </div>
+            </div>
+          </div>
+          <!-- Task Launchers -->
+          <div class="ps-section" data-section="task-launchers">
+            <h2>Task Launchers</h2>
+            <p class="ps-section-desc">Set up the whole issue-tracking workflow from scratch: a GitHub issue recipe, the auto-launch schedule, the triage instructions, and a launch API for an "outstanding issues" dashboard. The wizard discovers your project board automatically and writes every file for you.</p>
+            <div class="settings-card">
+              <div class="settings-card-body">
+                <div class="settings-label">Guided setup</div>
+                <div class="settings-hint">Walks you through repo &amp; account, board status discovery, filters, agent split and schedule, then scaffolds <code>.clay/tasks/</code> recipes, <code>config.json</code>, and <code>localAIConfig/TRIAGE.local.md</code> — plus a ready prompt to build your dashboard website.</div>
+                <div class="ps-textarea-actions">
+                  <button type="button" class="settings-btn-sm" id="ps-task-launcher-create"><i data-lucide="wand-2"></i> Create task launcher</button>
+                </div>
               </div>
             </div>
           </div>
@@ -1893,6 +1909,100 @@
       <div>
         <button id="ralph-wizard-skip" class="ralph-btn tertiary">Skip</button>
         <button id="ralph-wizard-next" class="ralph-btn primary">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Task Launcher Setup Wizard (reuses ralph-wizard styling) -->
+<div id="task-setup-wizard" class="hidden">
+  <div class="ralph-wizard-backdrop"></div>
+  <div class="ralph-wizard-card">
+    <div class="ralph-wizard-header">
+      <span>Set up task launcher</span>
+      <button id="tsw-close">&times;</button>
+    </div>
+    <div class="ralph-wizard-progress">
+      <span class="ralph-dot active" data-step="1"></span>
+      <span class="ralph-dot" data-step="2"></span>
+      <span class="ralph-dot" data-step="3"></span>
+      <span class="ralph-dot" data-step="4"></span>
+      <span class="ralph-dot" data-step="5"></span>
+    </div>
+    <div class="ralph-wizard-steps">
+      <!-- Step 1: repo + account -->
+      <div class="ralph-step active" data-step="1">
+        <h3>Repository &amp; GitHub account</h3>
+        <p class="ralph-hint">Issues are fetched as this account via the <code>gh</code> CLI.</p>
+        <label class="ralph-field-label" for="tsw-repo">Repo <span class="ralph-field-req">*</span></label>
+        <input type="text" id="tsw-repo" class="ps-text-input" spellcheck="false" placeholder="owner/name (e.g. trialview/v2)">
+        <label class="ralph-field-label" for="tsw-account" style="margin-top:8px;">GitHub account</label>
+        <select id="tsw-account" class="settings-select"></select>
+        <div class="ralph-hint" id="tsw-discover-status" style="margin-top:8px;"></div>
+      </div>
+      <!-- Step 2: board + filters -->
+      <div class="ralph-step" data-step="2">
+        <h3>Board &amp; filters</h3>
+        <label class="ralph-field-label" for="tsw-board">Project board</label>
+        <select id="tsw-board" class="settings-select"></select>
+        <p class="ralph-hint" style="margin-top:8px;">Tick the statuses that mean "done-ish" — issues in these columns are skipped (treated as not outstanding).</p>
+        <div id="tsw-status-list" class="tsw-checkbox-list"></div>
+        <label class="ralph-field-label" for="tsw-type" style="margin-top:8px;">Issue type</label>
+        <select id="tsw-type" class="settings-select">
+          <option value="">Any</option>
+          <option value="bug" selected>Bug</option>
+          <option value="feature">Feature</option>
+          <option value="legacy">Legacy</option>
+        </select>
+        <label class="ralph-field-label" for="tsw-assigned" style="margin-top:8px;">Assignee</label>
+        <select id="tsw-assigned" class="settings-select">
+          <option value="me" selected>Assigned to me</option>
+          <option value="any">Anyone</option>
+        </select>
+        <label class="ralph-field-label" for="tsw-exclude-labels" style="margin-top:8px;">Exclude labels (comma-separated)</label>
+        <input type="text" id="tsw-exclude-labels" class="ps-text-input" spellcheck="false" placeholder="BE, backend">
+        <label class="ralph-field-label" for="tsw-title-prefixes" style="margin-top:8px;">Exclude title prefixes (comma-separated)</label>
+        <input type="text" id="tsw-title-prefixes" class="ps-text-input" spellcheck="false" placeholder="BE:">
+      </div>
+      <!-- Step 3: automation -->
+      <div class="ralph-step" data-step="3">
+        <h3>Automation</h3>
+        <label class="ralph-field-label" for="tsw-recipe-id">Recipe id <span class="ralph-field-req">*</span></label>
+        <input type="text" id="tsw-recipe-id" class="ps-text-input" spellcheck="false" placeholder="assigned-to-me" value="assigned-to-me">
+        <label class="ralph-field-label" for="tsw-recipe-name" style="margin-top:8px;">Recipe name</label>
+        <input type="text" id="tsw-recipe-name" class="ps-text-input" spellcheck="false" placeholder="Auto-start issues assigned to me">
+        <label class="ralph-field-label" for="tsw-vendor" style="margin-top:8px;">Agent split <span id="tsw-vendor-label">70% Claude · 30% Codex</span></label>
+        <input type="range" id="tsw-vendor" class="us-range-input" min="0" max="100" step="10" value="70">
+        <label class="ralph-field-label" for="tsw-cron" style="margin-top:8px;">Poll schedule (cron)</label>
+        <input type="text" id="tsw-cron" class="ps-text-input" spellcheck="false" placeholder="*/5 * * * *" value="*/5 * * * *">
+        <label class="ralph-field-label" for="tsw-confidence" style="margin-top:8px;">Confidence threshold (%)</label>
+        <input type="number" id="tsw-confidence" class="ps-text-input" min="0" max="100" value="80">
+        <label class="ralph-field-label" for="tsw-dash-port" style="margin-top:8px;">Dashboard port</label>
+        <input type="number" id="tsw-dash-port" class="ps-text-input" value="8765">
+        <label class="tsw-check-row" style="margin-top:10px;"><input type="checkbox" id="tsw-enabled" checked> Enable auto-launch now</label>
+        <label class="tsw-check-row"><input type="checkbox" id="tsw-create-manual" checked> Also create a manual <code>/launch</code> recipe</label>
+        <label class="tsw-check-row"><input type="checkbox" id="tsw-overwrite-triage"> Overwrite existing TRIAGE.local.md</label>
+      </div>
+      <!-- Step 4: review -->
+      <div class="ralph-step" data-step="4">
+        <h3>Review</h3>
+        <div id="tsw-review" class="tsw-review"></div>
+      </div>
+      <!-- Step 5: done -->
+      <div class="ralph-step" data-step="5">
+        <h3>Done</h3>
+        <div id="tsw-result"></div>
+        <label class="ralph-field-label" for="tsw-website-prompt" style="margin-top:8px;">Paste this to an AI to build your dashboard website</label>
+        <textarea id="tsw-website-prompt" rows="8" spellcheck="false" readonly></textarea>
+        <div class="ps-textarea-actions">
+          <button type="button" class="ralph-btn secondary" id="tsw-copy-prompt"><i data-lucide="copy"></i> Copy prompt</button>
+        </div>
+      </div>
+    </div>
+    <div class="ralph-wizard-footer">
+      <button id="tsw-back" class="ralph-btn secondary">Back</button>
+      <div>
+        <button id="tsw-next" class="ralph-btn primary">Next</button>
       </div>
     </div>
   </div>

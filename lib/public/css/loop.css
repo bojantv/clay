@@ -1221,3 +1221,47 @@
   padding: 12px 16px;
   border-top: 1px solid var(--border);
 }
+
+/* Task launcher setup wizard (reuses ralph-wizard chrome) */
+#task-setup-wizard .ps-text-input,
+#task-setup-wizard .settings-select,
+#task-setup-wizard input[type="number"] {
+  width: 100%;
+  box-sizing: border-box;
+}
+.tsw-checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 180px;
+  overflow-y: auto;
+  border: 1px solid var(--border, #333);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+.tsw-check-row,
+.tsw-checkbox-list label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text, #fff);
+  cursor: pointer;
+}
+.tsw-check-row { margin-top: 6px; }
+.tsw-check-row input,
+.tsw-checkbox-list input { margin: 0; }
+.tsw-review {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.tsw-review b { color: var(--text, #fff); }
+.tsw-review code,
+#tsw-result code {
+  background: var(--input-bg, #1a1a2e);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+#tsw-result ul { margin: 6px 0; padding-left: 18px; }
+#tsw-result li { font-size: 13px; margin-bottom: 3px; }
