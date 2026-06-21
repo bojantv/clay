@@ -1803,6 +1803,11 @@ async function devMode(mode, keepAwake, existingPinHash, wantOsUsers) {
       stdio: ["ignore", "inherit", "inherit"],
       env: Object.assign({}, process.env, {
         CLAY_CONFIG: configPath(),
+        // Signals to the daemon that it runs under this dev watcher, which
+        // respawns it on exit code 120. Restart/update can therefore just exit
+        // 120 instead of self-spawning a replacement. NOT set in plain --debug
+        // mode (in-process require, no watcher), where the daemon must self-spawn.
+        CLAY_DEV_WATCHER: "1",
       }),
     });
 
