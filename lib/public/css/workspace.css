@@ -3,6 +3,23 @@
    screens, full-screen overlay on narrow. Content styling reuses the
    shared panel tokens. */
 
+/* Header toggle button — matches #terminal-toggle-btn / #find-in-session-btn */
+#workspace-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--text-dimmer);
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+#workspace-toggle-btn .lucide { width: 15px; height: 15px; }
+#workspace-toggle-btn:hover { color: var(--text-secondary); background: rgba(var(--overlay-rgb),0.04); border-color: var(--border); }
+#workspace-toggle-btn.active { color: var(--text); background: rgba(var(--overlay-rgb),0.06); border-color: var(--border); }
+
 /* Wide screens: split panel beside #app */
 @media (min-width: 1024px) {
   #workspace-panel {
