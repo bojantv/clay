@@ -853,12 +853,34 @@
   box-shadow: 0 8px 30px rgba(var(--shadow-rgb), 0.45);
 }
 .alap-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   padding: 6px 8px;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.4px;
   color: var(--text-muted);
+}
+.alap-clear {
+  appearance: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 5px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+}
+.alap-clear:hover {
+  background: var(--sidebar-hover);
+  color: var(--text);
 }
 .alap-empty { padding: 10px 8px; font-size: 13px; color: var(--text-muted); }
 .alap-list { display: flex; flex-direction: column; gap: 2px; }
