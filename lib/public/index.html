@@ -898,13 +898,12 @@
                   <div class="settings-hint">Recipe id: <code id="tsi-recipe-id-label">assigned-to-me</code> — edits write <code>.clay/tasks/&lt;id&gt;.json</code>.</div>
                 </div>
                 <div class="settings-field">
-                  <label class="settings-label" for="tsi-repo">Repo</label>
-                  <input type="text" id="tsi-repo" class="ps-text-input" spellcheck="false" autocomplete="off" placeholder="owner/name" list="tsi-repo-list">
-                  <datalist id="tsi-repo-list"></datalist>
-                </div>
-                <div class="settings-field">
                   <label class="settings-label" for="tsi-account">GitHub account</label>
                   <select id="tsi-account" class="settings-select"></select>
+                </div>
+                <div class="settings-field">
+                  <label class="settings-label" for="tsi-repo">Repo</label>
+                  <select id="tsi-repo" class="settings-select"></select>
                 </div>
                 <div class="settings-field">
                   <label class="settings-label" for="tsi-type">Issue type</label>
@@ -2019,11 +2018,10 @@
       <div class="ralph-step active" data-step="1">
         <h3>Repository &amp; GitHub account</h3>
         <p class="ralph-hint">Issues are fetched as this account via the <code>gh</code> CLI.</p>
-        <label class="ralph-field-label" for="tsw-repo">Repo <span class="ralph-field-req">*</span></label>
-        <input type="text" id="tsw-repo" class="ps-text-input" spellcheck="false" autocomplete="off" placeholder="owner/name (e.g. trialview/v2)" list="tsw-repo-list">
-        <datalist id="tsw-repo-list"></datalist>
-        <label class="ralph-field-label" for="tsw-account" style="margin-top:8px;">GitHub account</label>
+        <label class="ralph-field-label" for="tsw-account">GitHub account</label>
         <select id="tsw-account" class="settings-select"></select>
+        <label class="ralph-field-label" for="tsw-repo" style="margin-top:8px;">Repo <span class="ralph-field-req">*</span></label>
+        <select id="tsw-repo" class="settings-select"></select>
         <div class="ralph-hint" id="tsw-discover-status" style="margin-top:8px;"></div>
       </div>
       <!-- Step 2: board + filters -->
