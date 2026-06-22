@@ -861,6 +861,15 @@
 }
 .alap-empty { padding: 10px 8px; font-size: 13px; color: var(--text-muted); }
 .alap-list { display: flex; flex-direction: column; gap: 2px; }
+.alap-day {
+  padding: 8px 8px 3px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+  opacity: 0.75;
+}
 .alap-item {
   display: flex;
   gap: 8px;
