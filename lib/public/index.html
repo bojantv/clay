@@ -2054,10 +2054,12 @@
       <!-- Step 3: automation -->
       <div class="ralph-step" data-step="3">
         <h3>Automation</h3>
-        <label class="ralph-field-label" for="tsw-recipe-id">Recipe id <span class="ralph-field-req">*</span></label>
-        <input type="text" id="tsw-recipe-id" class="ps-text-input" spellcheck="false" placeholder="assigned-to-me" value="assigned-to-me">
-        <label class="ralph-field-label" for="tsw-recipe-name" style="margin-top:8px;">Recipe name</label>
+        <label class="ralph-field-label" for="tsw-recipe-name">Recipe name</label>
         <input type="text" id="tsw-recipe-name" class="ps-text-input" spellcheck="false" placeholder="Auto-start issues assigned to me">
+        <p class="ralph-hint" style="margin:4px 0 0;">A human-readable name for this launcher.</p>
+        <label class="ralph-field-label" for="tsw-recipe-id" style="margin-top:8px;">Recipe id</label>
+        <input type="text" id="tsw-recipe-id" class="ps-text-input" spellcheck="false" placeholder="assigned-to-me" value="assigned-to-me">
+        <p class="ralph-hint" style="margin:4px 0 0;">Internal id for this launcher's files (<code>.clay/tasks/&lt;id&gt;.json</code>). The default is fine — change it only if you want more than one launcher in this project.</p>
         <label class="ralph-field-label" for="tsw-vendor" style="margin-top:8px;">Agent split <span id="tsw-vendor-label">70% Claude · 30% Codex</span></label>
         <input type="range" id="tsw-vendor" class="us-range-input" min="0" max="100" step="10" value="70">
         <label class="ralph-field-label" for="tsw-cron" style="margin-top:8px;">Poll schedule (cron)</label>
