@@ -1267,3 +1267,20 @@
 }
 #tsw-result ul { margin: 6px 0; padding-left: 18px; }
 #tsw-result li { font-size: 13px; margin-bottom: 3px; }
+.tsw-loading-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.tsw-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border, #333);
+  border-top-color: var(--accent, #6c5ce7);
+  border-radius: 50%;
+  animation: tsw-spin 0.7s linear infinite;
+  flex: 0 0 auto;
+}
+@keyframes tsw-spin { to { transform: rotate(360deg); } }

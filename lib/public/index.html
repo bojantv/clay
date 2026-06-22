@@ -879,6 +879,12 @@
           <div class="ps-section" data-section="task-launchers">
             <h2>Task Launchers</h2>
             <p class="ps-section-desc">The GitHub issue recipe, auto-launch schedule, triage instructions, and the launch API for an "outstanding issues" dashboard. A new project is set up with a guided wizard; a configured project shows its current settings here so you can edit them.</p>
+            <!-- Loading from GitHub -->
+            <div class="settings-card hidden" id="tsw-loading">
+              <div class="settings-card-body">
+                <div class="tsw-loading-row"><span class="tsw-spinner"></span> Loading settings from GitHub…</div>
+              </div>
+            </div>
             <!-- New project: guided wizard entry -->
             <div class="settings-card hidden" id="tsw-setup-prompt">
               <div class="settings-card-body">
@@ -893,9 +899,13 @@
             <div class="settings-card hidden" id="tsw-inline">
               <div class="settings-card-body">
                 <div class="settings-field">
-                  <label class="settings-label" for="tsi-recipe-name">Recipe</label>
+                  <label class="settings-label" for="tsi-recipe">Recipe</label>
+                  <select id="tsi-recipe" class="settings-select"></select>
+                  <div class="settings-hint">The launcher to edit. Each is a file at <code>.clay/tasks/&lt;id&gt;.json</code>. Choose “➕ Create new launcher…” to set up another.</div>
+                </div>
+                <div class="settings-field">
+                  <label class="settings-label" for="tsi-recipe-name">Display name</label>
                   <input type="text" id="tsi-recipe-name" class="ps-text-input" spellcheck="false" placeholder="Auto-start issues assigned to me">
-                  <div class="settings-hint">Recipe id: <code id="tsi-recipe-id-label">assigned-to-me</code> — edits write <code>.clay/tasks/&lt;id&gt;.json</code>.</div>
                 </div>
                 <div class="settings-field">
                   <label class="settings-label" for="tsi-account">GitHub account</label>
