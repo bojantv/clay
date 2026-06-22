@@ -49,6 +49,7 @@ test("loads missing handoff context for GitHub Copilot sessions", function () {
     assert.ok(session.handoffContext, "handoff context should be recovered for Copilot");
     assert.ok(session.handoffContext.indexOf("Original Claude-side context") !== -1);
     assert.ok(session.handoffContext.indexOf("Continue with Copilot") === -1);
+    assert.strictEqual(session.handoffContextTurnsRemaining, 1);
 
     var savedMeta = JSON.parse(fs.readFileSync(path.join(sessionsDir, storageId + ".jsonl"), "utf8").split("\n")[0]);
     assert.strictEqual(savedMeta.handoffContextRecovered, true);
