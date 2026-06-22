@@ -846,6 +846,19 @@
                   <div class="settings-hint">Defines which issues qualify and the prompt each session runs. Recipes live in <code>.clay/tasks/*.json</code> in this project.</div>
                 </div>
                 <div class="settings-field">
+                  <label class="settings-toggle settings-toggle-inline">
+                    <input type="checkbox" id="ps-auto-launch-pr-fix">
+                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                    <span class="settings-label">Also auto-fix my PRs (CI + reviews)</span>
+                  </label>
+                  <div class="settings-hint">On each poll, also picks up open PRs you authored or committed to that have failing CI or new review feedback (including Copilot). A session triages each finding, fixes the worthwhile ones, drives CI green, and replies on the rest — then closes.</div>
+                  <div class="ps-pr-fix-passes" id="ps-auto-launch-pr-fix-passes">
+                    <label class="settings-label" for="ps-auto-launch-max-passes">Max passes per PR</label>
+                    <input type="number" id="ps-auto-launch-max-passes" class="ps-text-input" min="1" max="10" step="1" value="2" style="width:72px;">
+                    <div class="settings-hint">Caps auto-fix rounds so it won't ping-pong with the reviewer forever. A new commit you push resets the budget.</div>
+                  </div>
+                </div>
+                <div class="settings-field">
                   <label class="settings-label" for="ps-auto-launch-cron">Poll schedule (cron)</label>
                   <input type="text" id="ps-auto-launch-cron" class="ps-text-input" spellcheck="false" placeholder="*/5 * * * *">
                   <div class="settings-hint">5-field cron. Examples: <code>*/5 * * * *</code> (every 5 min), <code>*/15 * * * *</code> (every 15 min), <code>0 * * * *</code> (hourly).</div>
@@ -1705,9 +1718,16 @@
 
 <div id="image-modal" class="hidden">
   <div class="confirm-backdrop"></div>
+  <a class="image-modal-open" id="image-modal-open" href="#" target="_blank" rel="noopener" title="Open in new tab"><i data-lucide="external-link" style="width:18px;height:18px"></i></a>
+  <button class="image-modal-close"><i data-lucide="x" style="width:18px;height:18px"></i></button>
   <div class="image-modal-dialog">
     <img id="image-modal-img" src="" alt="">
-    <button class="image-modal-close"><i data-lucide="x" style="width:18px;height:18px"></i></button>
+    <video id="image-modal-video" class="hidden" controls playsinline preload="metadata"></video>
+    <div id="image-modal-fallback" class="image-modal-fallback hidden">
+      <i data-lucide="file-warning" style="width:32px;height:32px"></i>
+      <p>This media can't be previewed here.</p>
+      <span class="image-modal-fallback-hint">Use "Open in new tab" above to view it.</span>
+    </div>
   </div>
 </div>
 

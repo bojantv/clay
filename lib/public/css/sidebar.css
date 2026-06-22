@@ -947,6 +947,27 @@
   z-index: 2;
 }
 
+.session-auto-badge {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  height: 15px;
+  margin-right: 5px;
+  padding: 0 5px;
+  border-radius: 7px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: #fff;
+  background: #8a8f98;
+  vertical-align: middle;
+}
+
+.session-auto-badge.pr {
+  background: #6f42c1;
+}
+
 .session-item .session-item-text {
   padding-right: 28px;
 }

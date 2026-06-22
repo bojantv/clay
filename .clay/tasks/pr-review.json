@@ -1,0 +1,29 @@
+{
+  "id": "pr-review",
+  "name": "Auto-fix my PRs (CI + reviews)",
+  "description": "Watches open PRs you authored or committed to. When CI is red or a reviewer (including Copilot) leaves new feedback, starts a session that triages each finding, fixes the worthwhile ones, drives CI to green, and replies with a reason on the rest. Capped per PR by maxPasses; a new commit you push resets the budget.",
+  "source": {
+    "provider": "github",
+    "kind": "pr-reviews",
+    "repo": "trialview/v2",
+    "fetchLimit": 50
+  },
+  "launch": {
+    "defaultLimit": 5,
+    "maxPasses": 2
+  },
+  "prompt": {
+    "template": "pr-review.md"
+  },
+  "session": {
+    "title": "PR #{number} {title}",
+    "vendor": "claude",
+    "model": "default"
+  },
+  "completion": {
+    "marker": "CLAY_PR_REVIEW_COMPLETE",
+    "needsInputMarker": "CLAY_NEEDS_INPUT",
+    "closeSession": true,
+    "archiveSession": true
+  }
+}
