@@ -1284,3 +1284,5 @@
   flex: 0 0 auto;
 }
 @keyframes tsw-spin { to { transform: rotate(360deg); } }
+.tsi-copy-row { display: flex; gap: 8px; align-items: center; }
+.tsi-copy-row .ps-text-input { flex: 1 1 auto; min-width: 0; }

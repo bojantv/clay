@@ -971,6 +971,33 @@
                 <div class="settings-hint">Editing here updates the recipe and <code>config.json</code> only — it never overwrites <code>TRIAGE.local.md</code> or your prompt templates. Use the wizard to rebuild from scratch.</div>
               </div>
             </div>
+            <!-- Dashboard / website connection -->
+            <div class="settings-card hidden" id="tsi-dashboard">
+              <div class="settings-card-body">
+                <div class="settings-label">Dashboard / website connection</div>
+                <div class="settings-hint">Wire an "outstanding issues" website to launch issues into Clay. Each issue card POSTs <code>{ token, recipe, issue, vendor }</code> to the launch API below.</div>
+                <div class="settings-field">
+                  <label class="settings-label" for="tsi-launch-url">Launch API URL</label>
+                  <div class="tsi-copy-row">
+                    <input type="text" id="tsi-launch-url" class="ps-text-input" readonly spellcheck="false">
+                    <button type="button" class="settings-btn-sm" id="tsi-copy-url">Copy</button>
+                  </div>
+                </div>
+                <div class="settings-field">
+                  <label class="settings-label" for="tsi-launch-token">Token</label>
+                  <div class="tsi-copy-row">
+                    <input type="password" id="tsi-launch-token" class="ps-text-input" readonly spellcheck="false">
+                    <button type="button" class="settings-btn-sm" id="tsi-reveal-token">Show</button>
+                    <button type="button" class="settings-btn-sm" id="tsi-copy-token">Copy</button>
+                  </div>
+                  <div class="settings-hint">Recipe to launch: <code id="tsi-launch-recipe">assigned-to-me</code>. Keep the token only in the local dashboard file — don't commit it.</div>
+                </div>
+                <div class="ps-textarea-actions">
+                  <button type="button" class="settings-btn-sm" id="tsi-copy-prompt"><i data-lucide="copy"></i> Copy website build prompt</button>
+                  <span class="ps-save-status" id="tsi-dashboard-status"></span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
