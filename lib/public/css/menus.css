@@ -183,6 +183,7 @@
 #terminal-toggle-btn .lucide { width: 15px; height: 15px; }
 #footer-status:hover,
 #terminal-toggle-btn:hover { color: var(--text-secondary); background: rgba(var(--overlay-rgb),0.04); border-color: var(--border); }
+#terminal-toggle-btn.active { color: var(--text); background: rgba(var(--overlay-rgb),0.06); border-color: var(--border); }
 #terminal-toggle-btn { position: relative; }
 #terminal-count {
   position: absolute;
