@@ -586,6 +586,61 @@ pre.mermaid-error {
 }
 .image-modal-close:hover { background: rgba(var(--overlay-rgb), 0.2); }
 
+#image-modal-img.hidden, #image-modal-video.hidden { display: none; }
+
+#image-modal-video {
+  max-width: 92vw;
+  max-height: 90vh;
+  border-radius: 12px;
+  background: #000;
+  box-shadow: 0 24px 80px rgba(var(--shadow-rgb), 0.6);
+}
+
+/* "Open in new tab" — sits to the left of the close button, same chrome. */
+.image-modal-open {
+  position: fixed;
+  top: 16px;
+  right: 64px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(var(--shadow-rgb), 0.5);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.image-modal-open:hover { background: rgba(var(--overlay-rgb), 0.2); }
+
+/* Shown when the asset can't load in-app (e.g. private GitHub media). */
+.image-modal-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  max-width: 90vw;
+  padding: 32px 28px;
+  border-radius: 12px;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-align: center;
+}
+.image-modal-fallback.hidden { display: none; }
+.image-modal-fallback p { margin: 0; font-weight: 600; }
+.image-modal-fallback-hint { color: var(--text-dim); font-size: 13px; }
+
+/* Mobile: respect the notch and give media more of the viewport. */
+@media (max-width: 768px) {
+  .image-modal-close { top: calc(var(--safe-top) + 12px); right: 12px; }
+  .image-modal-open { top: calc(var(--safe-top) + 12px); right: 60px; }
+  #image-modal-img, #image-modal-video { max-width: 96vw; max-height: 86vh; }
+}
+
 /* ==========================================================================
    Thinking
    ========================================================================== */
