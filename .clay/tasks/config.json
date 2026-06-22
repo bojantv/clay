@@ -1,6 +1,6 @@
 {
   "autoLaunch": {
-    "enabled": true,
+    "enabled": false,
     "recipeId": "assigned-to-me",
     "recipes": ["assigned-to-me", "pr-review"],
     "cron": "*/5 * * * *",
