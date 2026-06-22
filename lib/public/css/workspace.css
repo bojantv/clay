@@ -210,6 +210,37 @@
 .ws-thumb [data-lucide] { width: 22px; height: 22px; }
 .ws-thumb-video { color: var(--accent, #d98a3a); }
 
+/* Session screenshot tile with hover actions */
+.ws-shot { position: relative; }
+.ws-shot .ws-thumb { width: 100%; }
+.ws-shot-actions {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  display: flex;
+  gap: 3px;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.ws-shot:hover .ws-shot-actions,
+.ws-shot:focus-within .ws-shot-actions { opacity: 1; }
+.ws-shot-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 5px;
+  background: rgba(var(--shadow-rgb, 0,0,0), 0.6);
+  color: #fff;
+  cursor: pointer;
+}
+.ws-shot-btn:hover { background: rgba(var(--shadow-rgb, 0,0,0), 0.85); }
+.ws-shot-btn:disabled { opacity: 0.5; cursor: default; }
+.ws-shot-btn [data-lucide] { width: 13px; height: 13px; }
+
 .ws-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
 .ws-dot-on { background: #2da44e; }
 .ws-dot-warn { background: #d4a72c; }
