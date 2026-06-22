@@ -380,6 +380,7 @@
           </button>
           <button id="debate-pdf-btn" class="hidden" title="Export debate as PDF"><i data-lucide="download"></i></button>
           <button id="find-in-session-btn" title="Search in session (Ctrl+F)"><i data-lucide="search"></i></button>
+          <button id="workspace-toggle-btn" title="Session context (issues, PR, dev server)"><i data-lucide="panel-right"></i></button>
           <button id="terminal-toggle-btn" title="Terminal"><i data-lucide="square-terminal"></i><span id="terminal-count" class="hidden"></span></button>
         </div>
       </div>
@@ -898,7 +899,8 @@
                 </div>
                 <div class="settings-field">
                   <label class="settings-label" for="tsi-repo">Repo</label>
-                  <input type="text" id="tsi-repo" class="ps-text-input" spellcheck="false" placeholder="owner/name">
+                  <input type="text" id="tsi-repo" class="ps-text-input" spellcheck="false" autocomplete="off" placeholder="owner/name" list="tsi-repo-list">
+                  <datalist id="tsi-repo-list"></datalist>
                 </div>
                 <div class="settings-field">
                   <label class="settings-label" for="tsi-account">GitHub account</label>
@@ -921,13 +923,15 @@
                   </select>
                 </div>
                 <div class="settings-field">
-                  <label class="settings-label" for="tsi-skip-statuses">Skip board statuses (comma-separated)</label>
-                  <input type="text" id="tsi-skip-statuses" class="ps-text-input" spellcheck="false" placeholder="🔧 Dev Complete, ✅ Done">
-                  <div class="settings-hint">Issues in these board columns are treated as done and skipped. To rediscover columns from the board, use the wizard.</div>
+                  <label class="settings-label" for="tsi-board">Project board</label>
+                  <select id="tsi-board" class="settings-select"></select>
+                  <div class="settings-hint">Tick the board columns that mean "done" — issues in them are skipped.</div>
+                  <div id="tsi-status-list" class="tsw-checkbox-list"></div>
                 </div>
                 <div class="settings-field">
-                  <label class="settings-label" for="tsi-exclude-labels">Exclude labels (comma-separated)</label>
-                  <input type="text" id="tsi-exclude-labels" class="ps-text-input" spellcheck="false" placeholder="BE, backend">
+                  <label class="settings-label">Exclude labels</label>
+                  <div class="settings-hint">Issues with any ticked label are skipped.</div>
+                  <div id="tsi-label-list" class="tsw-checkbox-list"></div>
                 </div>
                 <div class="settings-field">
                   <label class="settings-label" for="tsi-title-prefixes">Exclude title prefixes (comma-separated)</label>
@@ -994,6 +998,16 @@
       <button class="term-key" data-key="tilde">~</button>
     </div>
     <div id="terminal-body"></div>
+  </div>
+  <div id="workspace-panel" class="hidden">
+    <div class="terminal-header">
+      <div class="ws-panel-title"><i data-lucide="panel-right"></i> Session context</div>
+      <div class="terminal-header-actions">
+        <button class="file-viewer-btn" id="workspace-refresh-btn" title="Refresh"><i data-lucide="refresh-cw"></i></button>
+        <button class="file-viewer-btn" id="workspace-close-btn" title="Hide panel"><i data-lucide="minus"></i></button>
+      </div>
+    </div>
+    <div id="workspace-body" class="ws-body"></div>
   </div>
   </div><!-- /main-panels -->
   </div><!-- /main-column -->
@@ -2031,8 +2045,9 @@
           <option value="me" selected>Assigned to me</option>
           <option value="any">Anyone</option>
         </select>
-        <label class="ralph-field-label" for="tsw-exclude-labels" style="margin-top:8px;">Exclude labels (comma-separated)</label>
-        <input type="text" id="tsw-exclude-labels" class="ps-text-input" spellcheck="false" placeholder="BE, backend">
+        <label class="ralph-field-label" style="margin-top:8px;">Exclude labels</label>
+        <p class="ralph-hint" style="margin:0 0 6px;">Issues with any ticked label are skipped.</p>
+        <div id="tsw-label-list" class="tsw-checkbox-list"></div>
         <label class="ralph-field-label" for="tsw-title-prefixes" style="margin-top:8px;">Exclude title prefixes (comma-separated)</label>
         <input type="text" id="tsw-title-prefixes" class="ps-text-input" spellcheck="false" placeholder="BE:">
       </div>
