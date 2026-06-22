@@ -68,3 +68,60 @@ test("auto-launch maxPasses config overrides pr-review recipe default", function
     fs.rmSync(cwd, { recursive: true, force: true });
   }
 });
+
+test("disabled auto-launch config ignores stale registry triggers", function () {
+  var cwd = fs.mkdtempSync(path.join(os.tmpdir(), "clay-autolaunch-"));
+  var tasksDir = path.join(cwd, ".clay", "tasks");
+  fs.mkdirSync(tasksDir, { recursive: true });
+  fs.writeFileSync(path.join(tasksDir, "config.json"), JSON.stringify({
+    autoLaunch: {
+      enabled: false,
+      recipeId: "assigned-to-me",
+      recipes: ["assigned-to-me", "pr-review"],
+      cron: "*/5 * * * *",
+    },
+  }, null, 2) + "\n");
+
+  var fetched = 0;
+  var launched = 0;
+  var updated = null;
+  var autoLaunch = attachAutoLaunch({
+    cwd: cwd,
+    sm: {
+      sessions: new Map(),
+      broadcastSessionList: function () {},
+    },
+    loopRegistry: {
+      getById: function () {
+        return { id: "autolaunch_assigned", enabled: true, task: "assigned-to-me" };
+      },
+      updateRecord: function (id, data) {
+        updated = { id: id, data: data };
+      },
+    },
+    getTaskLauncher: function () {
+      return {
+        loadRecipe: function () {
+          launched++;
+          return null;
+        },
+      };
+    },
+    fetchItems: function () {
+      fetched++;
+      return [];
+    },
+  });
+
+  try {
+    autoLaunch.runScheduled({ id: "autolaunch_assigned", task: "assigned-to-me" });
+    assert.strictEqual(fetched, 0);
+    assert.strictEqual(launched, 0);
+    assert.deepStrictEqual(updated, {
+      id: "autolaunch_assigned",
+      data: { enabled: false, nextRunAt: null },
+    });
+  } finally {
+    fs.rmSync(cwd, { recursive: true, force: true });
+  }
+});
