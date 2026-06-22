@@ -392,6 +392,7 @@
 }
 
 /* --- Shared tile style (applies in both active and hidden grids) --- */
+.palette-tile.palette-tile--proj-hidden { display: none !important; }
 .palette-tile {
   position: relative;
   display: flex;
