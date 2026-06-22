@@ -386,6 +386,29 @@
   .mobile-session-new-row .mobile-session-new-vendor:active {
     background: rgba(var(--overlay-rgb), 0.1);
   }
+
+  .mobile-session-new-row .mobile-session-import {
+    flex: 0 0 auto;
+    width: auto;
+    margin-bottom: 0;
+    padding: 10px 11px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    background: rgba(var(--accent-rgb, 88, 87, 252), 0.08);
+    color: var(--accent);
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .mobile-session-new-row .mobile-session-import svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .mobile-session-new-row .mobile-session-import:active {
+    background: rgba(var(--accent-rgb, 88, 87, 252), 0.16);
+  }
+
   .mobile-session-new-icon {
     width: 18px;
     height: 18px;
@@ -560,6 +583,28 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .mobile-session-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    margin: -6px -4px -6px 0;
+    border-radius: 8px;
+    color: var(--text-dimmer);
+    flex-shrink: 0;
+  }
+
+  .mobile-session-action:active {
+    background: rgba(var(--overlay-rgb), 0.08);
+    color: var(--text);
+  }
+
+  .mobile-session-action svg {
+    width: 18px;
+    height: 18px;
   }
 
   .mobile-session-auto-badge {
@@ -1186,5 +1231,31 @@
   }
   body.mate-dm-active .msg-user:hover {
     background: initial !important;
+  }
+
+  .autolaunch-activity-popover {
+    left: 8px !important;
+    right: 8px !important;
+    top: auto !important;
+    bottom: calc(var(--safe-bottom) + 72px) !important;
+    width: auto;
+    max-height: 52vh;
+    border-radius: 14px;
+  }
+
+  .session-ctx-menu {
+    max-width: calc(100vw - 16px);
+    min-width: 190px;
+  }
+
+  .session-ctx-item {
+    min-height: 42px;
+    font-size: 14px;
+  }
+
+  .import-session-modal {
+    width: calc(100vw - 24px) !important;
+    max-width: calc(100vw - 24px) !important;
+    max-height: calc(100vh - var(--safe-bottom) - 36px) !important;
   }
 }
