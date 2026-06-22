@@ -81,6 +81,18 @@
 .ws-empty-sm { padding: 6px 0; color: var(--text-dim); font-size: 11px; }
 .ws-muted { color: var(--text-dim); font-size: 11px; }
 
+/* Informational note (e.g. "bound to this session's worktree"). */
+.ws-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 4px 0 2px;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+.ws-note .lucide { width: 13px; height: 13px; flex-shrink: 0; margin-top: 1px; color: var(--accent, #d98a3a); }
+.ws-note code { font-size: 10px; }
+
 .ws-section {
   background: var(--bg-alt);
   border: 1px solid var(--border);
