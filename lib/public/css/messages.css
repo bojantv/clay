@@ -165,26 +165,6 @@
   display: flex;
 }
 
-/* Pending queued message: sent while the session is still processing, shown
-   dimmed until it actually runs (then reconciled to a solid bubble). */
-.msg-user-pending .bubble {
-  opacity: 0.55;
-}
-.msg-user-queued-status {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 4px;
-  margin-top: 4px;
-  font-size: 11px;
-  color: var(--text-dimmer);
-  user-select: none;
-}
-.msg-user-queued-status [data-lucide] {
-  width: 12px;
-  height: 12px;
-}
-
 /* --- User message action bar --- */
 .msg-actions {
   display: flex;
