@@ -163,6 +163,8 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.ws-item-title { color: var(--text); text-decoration: none; }
+.ws-item-title:hover { text-decoration: underline; }
 .ws-item-title [data-lucide] { width: 13px; height: 13px; flex-shrink: 0; }
 .ws-pin-btn {
   background: none;
