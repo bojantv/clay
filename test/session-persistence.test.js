@@ -111,6 +111,60 @@ test("runtime session id changes keep a stable storage id", function () {
   assert.deepStrictEqual(recorded, []);
 });
 
+test("persists GitHub Copilot handoff native reset marker", function () {
+  var tmpHome = fs.mkdtempSync(path.join(os.tmpdir(), "clay-session-"));
+  var projectDir = fs.mkdtempSync(path.join(os.tmpdir(), "clay-project-"));
+  var oldClayHome = process.env.CLAY_HOME;
+  process.env.CLAY_HOME = tmpHome;
+
+  try {
+    delete require.cache[require.resolve("../lib/config")];
+    delete require.cache[require.resolve("../lib/sessions")];
+
+    var utils = require("../lib/utils");
+    var encoded = utils.encodeCwd(projectDir);
+    var sessionsDir = path.join(tmpHome, "sessions", encoded);
+    fs.mkdirSync(sessionsDir, { recursive: true });
+
+    var storageId = "copilot-handoff-reset";
+    var lines = [
+      JSON.stringify({
+        type: "meta",
+        localId: 1,
+        cliSessionId: "copilot-runtime-1",
+        storageId: storageId,
+        title: "Vendor handoff",
+        createdAt: Date.now(),
+        vendor: "github-copilot",
+        handoffContextConsumed: true,
+        copilotHandoffNativeReset: true,
+      }),
+      JSON.stringify({ type: "user_message", text: "Continue after reset", _ts: Date.now() }),
+    ];
+    fs.writeFileSync(path.join(sessionsDir, storageId + ".jsonl"), lines.join("\n") + "\n");
+
+    var createSessionManager = require("../lib/sessions").createSessionManager;
+    var sm = createSessionManager({
+      cwd: projectDir,
+      send: function () {},
+    });
+    var session = sm.sessions.get(1);
+
+    assert.strictEqual(session.copilotHandoffNativeReset, true);
+    sm.saveSessionFile(session);
+
+    var savedMeta = JSON.parse(fs.readFileSync(path.join(sessionsDir, storageId + ".jsonl"), "utf8").split("\n")[0]);
+    assert.strictEqual(savedMeta.copilotHandoffNativeReset, true);
+  } finally {
+    if (typeof oldClayHome === "string") process.env.CLAY_HOME = oldClayHome;
+    else delete process.env.CLAY_HOME;
+    delete require.cache[require.resolve("../lib/config")];
+    delete require.cache[require.resolve("../lib/sessions")];
+    fs.rmSync(tmpHome, { recursive: true, force: true });
+    fs.rmSync(projectDir, { recursive: true, force: true });
+  }
+});
+
 test("saved session metadata omits volatile local id", function () {
   var tmpHome = fs.mkdtempSync(path.join(os.tmpdir(), "clay-session-"));
   var projectDir = fs.mkdtempSync(path.join(os.tmpdir(), "clay-project-"));
