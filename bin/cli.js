@@ -380,8 +380,16 @@ function clearUp(n) {
 // --- Daemon watcher ---
 // Polls daemon socket; if connection fails, the server is down.
 var _daemonWatcher = null;
+// In dev mode the daemon is supervised by the child-process exit handler in
+// devMode() (which understands exit code 120 = intentional update restart and
+// respawns). The socket-poll watcher below has no knowledge of intentional
+// restarts: during the brief gap while the daemon respawns it would call
+// onDaemonDied(), find no crash.json, conclude "intentional shutdown" and
+// process.exit(0) — killing the parent before the respawn runs. Suppress it.
+var _devWatcherActive = false;
 
 function startDaemonWatcher() {
+  if (_devWatcherActive) return;
   if (_daemonWatcher) return;
   _daemonWatcher = setInterval(function () {
     var client = net.connect(socketPath());
@@ -1690,6 +1698,10 @@ async function forkDaemon(mode, keepAwake, extraProjects, addCwd, wantOsUsers) {
 // Dev mode — foreground daemon with file watching
 // ==============================
 async function devMode(mode, keepAwake, existingPinHash, wantOsUsers) {
+  // The child-process exit handler below is the authoritative daemon supervisor
+  // in dev mode. Mark dev-watcher active so the socket-poll watcher (started by
+  // showMainMenu) never runs and races the intentional code-120 restart.
+  _devWatcherActive = true;
   var ip = getLocalIP();
   var hasTls = false;
   var hasBuiltinCert = false;
