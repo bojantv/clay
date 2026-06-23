@@ -277,6 +277,8 @@
 .ws-devbtn [data-lucide] { width: 14px; height: 14px; }
 .ws-dev-start { border-color: #2da44e88; color: #2da44e; }
 .ws-dev-stop { border-color: #cf222e88; color: #cf222e; }
+.ws-dev-restart { border-color: #d4a72c88; color: #bf8700; }
+.ws-devbtns { display: flex; gap: 8px; flex-wrap: wrap; }
 
 .ws-add { display: flex; gap: 6px; margin-top: 8px; }
 .ws-add input {
