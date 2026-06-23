@@ -37,14 +37,30 @@
 .pill-warning { background: color-mix(in srgb, var(--warning) 12%, transparent); color: var(--warning); }
 .pill-dim     { background: color-mix(in srgb, var(--text-dimmer) 8%, transparent); color: var(--text-dimmer); }
 
-/* Usage check link in top bar */
+/* Usage check link in top bar — now a container with one segment per vendor */
 .usage-check-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: default;
+}
+.usage-check-seg {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   text-decoration: none;
+  color: inherit;
   cursor: pointer;
+  border-radius: 5px;
+  padding: 1px 4px;
+  margin: -1px -2px;
   transition: background 0.15s;
 }
-.usage-check-link:hover {
+.usage-check-seg:hover {
   background: color-mix(in srgb, var(--text-dimmer) 16%, transparent);
+}
+.usage-check-sep {
+  opacity: 0.4;
 }
 .usage-check-vendor-icon {
   width: 14px;
@@ -57,7 +73,7 @@
   width: 12px;
   height: 12px;
 }
-.usage-check-link .lucide:last-child {
+.usage-check-seg .lucide:last-child {
   opacity: 0.5;
   width: 10px;
   height: 10px;
