@@ -5,6 +5,92 @@ var os = require("os");
 var path = require("path");
 
 var { attachAutoLaunch } = require("../lib/project-auto-launch");
+var { attachTaskLauncher } = require("../lib/project-task-launcher");
+
+function makeTaskLauncher() {
+  var cwd = fs.mkdtempSync(path.join(os.tmpdir(), "clay-tasklauncher-"));
+  var completed = [];
+  var neededInput = [];
+  var hidden = [];
+  var tl = attachTaskLauncher({
+    cwd: cwd,
+    sm: {
+      saveSessionFile: function () {},
+      hideSessionForActiveClients: function (id) { hidden.push(id); },
+      hideSession: function (id) { hidden.push(id); },
+    },
+    sdk: {},
+    onComplete: function (session, summary) { completed.push({ session: session, summary: summary }); },
+    onNeedsInput: function (session, text) { neededInput.push({ session: session, text: text }); },
+  });
+  return { tl: tl, cwd: cwd, completed: completed, neededInput: neededInput, hidden: hidden };
+}
+
+function makeAutoSession() {
+  return {
+    localId: 7,
+    taskLauncher: {
+      recipeId: "assigned-to-me",
+      itemNumber: 1975,
+      autoLaunch: true,
+      autoKind: "issue",
+      completion: {
+        marker: "CLAY_TASK_COMPLETE",
+        needsInputMarker: "CLAY_NEEDS_INPUT",
+        closeSession: true,
+        archiveSession: true,
+      },
+    },
+  };
+}
+
+test("'mark as done' does not complete the workflow until the marker is emitted", function () {
+  var h = makeTaskLauncher();
+  try {
+    var session = makeAutoSession();
+    var directive = h.tl.handleTaskUserMessageDispatched(session, "Mark as done");
+    // The user request latches a close and injects a directive that tells the
+    // agent to finish and emit the completion marker.
+    assert.strictEqual(session.taskLauncher.closeAfterNextTurn, true);
+    assert.ok(directive && directive.indexOf("CLAY_TASK_COMPLETE") !== -1, "directive should reference the marker");
+
+    // Agent asks a clarifying question instead of completing — must NOT close.
+    h.tl.handleTaskTurnDone(session, "", "There are no todos. Could you clarify what to mark as done?");
+    assert.notStrictEqual(session.taskLauncher.workflowCompleted, true);
+    assert.strictEqual(h.completed.length, 0);
+    assert.strictEqual(h.hidden.length, 0);
+  } finally {
+    fs.rmSync(h.cwd, { recursive: true, force: true });
+  }
+});
+
+test("workflow completes only when the marker is emitted", function () {
+  var h = makeTaskLauncher();
+  try {
+    var session = makeAutoSession();
+    h.tl.handleTaskUserMessageDispatched(session, "Mark as done");
+    h.tl.handleTaskTurnDone(session, "", "Fixed the rename bug and pushed. CLAY_TASK_COMPLETE: fixed file-name display");
+    assert.strictEqual(session.taskLauncher.workflowCompleted, true);
+    assert.strictEqual(h.completed.length, 1);
+    assert.strictEqual(h.completed[0].summary, "fixed file-name display");
+  } finally {
+    fs.rmSync(h.cwd, { recursive: true, force: true });
+  }
+});
+
+test("needs-input marker pauses for input without completing", function () {
+  var h = makeTaskLauncher();
+  try {
+    var session = makeAutoSession();
+    h.tl.handleTaskUserMessageDispatched(session, "Mark as done");
+    h.tl.handleTaskTurnDone(session, "", "I need a decision here. CLAY_NEEDS_INPUT");
+    assert.notStrictEqual(session.taskLauncher.workflowCompleted, true);
+    assert.strictEqual(h.neededInput.length, 1);
+    assert.strictEqual(h.completed.length, 0);
+  } finally {
+    fs.rmSync(h.cwd, { recursive: true, force: true });
+  }
+});
 
 test("auto-launch maxPasses config overrides pr-review recipe default", function () {
   var cwd = fs.mkdtempSync(path.join(os.tmpdir(), "clay-autolaunch-"));
