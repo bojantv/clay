@@ -44,6 +44,28 @@ test("startCopilotSession resumes when a session id and resume capability are pr
   assert.deepStrictEqual(calls, [["resume", "stored-id"]]);
 });
 
+test("startCopilotSession backfills the session id when resume acks without echoing it", async function () {
+  var connection = {
+    resumeSession: function () { return Promise.resolve({}); }, // ack with no sessionId
+    newSession: function () { return Promise.resolve({ sessionId: "fresh" }); },
+  };
+  var caps = { sessionCapabilities: { resume: true } };
+  var session = await helpers.startCopilotSession(connection, caps, { cwd: "/x", sessionId: "stored-id" });
+
+  assert.strictEqual(session.sessionId, "stored-id");
+});
+
+test("startCopilotSession backfills the session id when load returns void", async function () {
+  var connection = {
+    loadSession: function () { return Promise.resolve(undefined); },
+    newSession: function () { return Promise.resolve({ sessionId: "fresh" }); },
+  };
+  var caps = { loadSession: true };
+  var session = await helpers.startCopilotSession(connection, caps, { cwd: "/x", sessionId: "stored-id" });
+
+  assert.strictEqual(session.sessionId, "stored-id");
+});
+
 test("startCopilotSession falls back to a fresh session when resume rejects (stale id after restart)", async function () {
   var calls = [];
   var connection = {
