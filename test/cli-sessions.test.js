@@ -56,6 +56,79 @@ test("Codex import keeps first user prompt even when it starts with injected ins
   }
 });
 
+test("hidden sessions are surfaced for import and can be restored", function () {
+  var tmpHome = fs.mkdtempSync(path.join(os.tmpdir(), "clay-hidden-import-"));
+  var projectDir = fs.mkdtempSync(path.join(os.tmpdir(), "clay-project-"));
+  var oldClayHome = process.env.CLAY_HOME;
+  process.env.CLAY_HOME = tmpHome;
+
+  try {
+    delete require.cache[require.resolve("../lib/config")];
+    delete require.cache[require.resolve("../lib/sessions")];
+
+    var utils = require("../lib/utils");
+    var encoded = utils.encodeCwd(projectDir);
+    var sessionsDir = path.join(tmpHome, "sessions", encoded);
+    fs.mkdirSync(sessionsDir, { recursive: true });
+
+    // A closed/archived github-copilot session. Its provider id is recorded in
+    // the history (session_id event), which is what made it "known" and got it
+    // excluded from the import picker before the fix.
+    var hidden = [
+      JSON.stringify({
+        type: "meta", localId: 1, cliSessionId: "copilot-hidden-1",
+        storageId: "copilot-hidden-1", title: "#1975 closed early", hidden: true,
+        vendor: "github-copilot", model: "gpt-5.5", createdAt: Date.now(),
+      }),
+      JSON.stringify({ type: "user_message", text: "fix it", _ts: Date.now() }),
+      JSON.stringify({ type: "session_id", cliSessionId: "copilot-hidden-1", _ts: Date.now() }),
+    ];
+    fs.writeFileSync(path.join(sessionsDir, "copilot-hidden-1.jsonl"), hidden.join("\n") + "\n");
+
+    // A compaction source — its content lives in a successor, so it must NOT
+    // be surfaced as a separate importable entry.
+    var source = [
+      JSON.stringify({
+        type: "meta", localId: 2, cliSessionId: "codex-source-1",
+        storageId: "codex-source-1", title: "pre-compaction source", hidden: true,
+        vendor: "codex", compactedIntoLocalId: 1, createdAt: Date.now(),
+      }),
+      JSON.stringify({ type: "session_id", cliSessionId: "codex-source-1", _ts: Date.now() }),
+    ];
+    fs.writeFileSync(path.join(sessionsDir, "codex-source-1.jsonl"), source.join("\n") + "\n");
+
+    var createSessionManager = require("../lib/sessions").createSessionManager;
+    var sm = createSessionManager({ cwd: projectDir, send: function () {} });
+
+    // gpt-5.5 maps to the codex family, so it shows under the codex picker...
+    var codexList = sm.listAdoptableCliSessions("codex");
+    var found = codexList.filter(function (s) { return s.cliSessionId === "copilot-hidden-1"; });
+    assert.strictEqual(found.length, 1, "hidden copilot session should be importable under codex filter");
+    assert.strictEqual(found[0].hidden, true);
+    assert.strictEqual(found[0].vendor, "github-copilot");
+
+    // ...but not under the claude picker (wrong family).
+    var claudeList = sm.listAdoptableCliSessions("claude");
+    assert.strictEqual(claudeList.filter(function (s) { return s.cliSessionId === "copilot-hidden-1"; }).length, 0);
+
+    // The compaction source is never offered.
+    assert.strictEqual(codexList.concat(claudeList).filter(function (s) { return s.cliSessionId === "codex-source-1"; }).length, 0);
+
+    // Importing the hidden session un-hides it.
+    var localId = sm.importCliSession("copilot-hidden-1", "github-copilot");
+    assert.ok(localId, "import should return the restored session's localId");
+    assert.strictEqual(sm.sessions.get(localId).cliSessionId, "copilot-hidden-1");
+    assert.strictEqual(sm.sessions.get(localId).hidden, false);
+  } finally {
+    if (typeof oldClayHome === "string") process.env.CLAY_HOME = oldClayHome;
+    else delete process.env.CLAY_HOME;
+    delete require.cache[require.resolve("../lib/config")];
+    delete require.cache[require.resolve("../lib/sessions")];
+    fs.rmSync(tmpHome, { recursive: true, force: true });
+    fs.rmSync(projectDir, { recursive: true, force: true });
+  }
+});
+
 test("CLI session import preserves original message timestamps as _ts", function () {
   var tmpHome = fs.mkdtempSync(path.join(os.tmpdir(), "clay-cli-ts-"));
   var projectDir = fs.mkdtempSync(path.join(os.tmpdir(), "clay-project-"));
