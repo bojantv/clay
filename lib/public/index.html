@@ -988,7 +988,14 @@
             <div class="settings-card hidden" id="tsi-cookbook">
               <div class="settings-card-body">
                 <div class="settings-label">Triage cookbook</div>
-                <div class="settings-hint">The workflow these launchers follow — branching, draft-PR rules, board IDs, and the "mark as done" steps. Stored at <code id="tsi-cookbook-path">localAIConfig/TRIAGE.local.md</code> and injected into the sessions this project's recipes start. Edits apply to the next session that runs.</div>
+                <div class="settings-hint">The workflow + conventions these launchers follow — branching, worktree rules, draft-PR / "mark as done" steps, board IDs. These docs are injected into the sessions this project's recipes start. Edits apply to the next session that runs.</div>
+                <div class="settings-field">
+                  <label class="settings-label" for="tsi-cookbook-file">File</label>
+                  <select id="tsi-cookbook-file" class="settings-select">
+                    <option value="localAIConfig/TRIAGE.local.md">localAIConfig/TRIAGE.local.md — triage workflow</option>
+                    <option value="localAIConfig/AGENTS.local.md">localAIConfig/AGENTS.local.md — agent conventions</option>
+                  </select>
+                </div>
                 <textarea id="tsi-cookbook-editor" class="ps-textarea" rows="20" spellcheck="false" placeholder="Loading…"></textarea>
                 <div class="ps-textarea-actions">
                   <button type="button" class="settings-btn-sm" id="tsi-cookbook-save">Save cookbook</button>
