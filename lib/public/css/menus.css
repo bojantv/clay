@@ -1028,8 +1028,13 @@
   }
 
   #config-popover {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(var(--safe-bottom, 0px) + 56px + 64px);
     min-width: 0;
-    width: calc(100vw - 24px);
+    width: auto;
+    max-height: min(600px, calc(100vh - var(--safe-bottom, 0px) - 200px));
   }
 
   .session-info-popover {
