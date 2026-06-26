@@ -984,6 +984,18 @@
                 <div class="settings-hint">Editing here updates the recipe and <code>config.json</code> only — it never overwrites <code>TRIAGE.local.md</code> or your prompt templates. Use the wizard to rebuild from scratch.</div>
               </div>
             </div>
+            <!-- Triage cookbook (the per-project workflow doc injected into sessions) -->
+            <div class="settings-card hidden" id="tsi-cookbook">
+              <div class="settings-card-body">
+                <div class="settings-label">Triage cookbook</div>
+                <div class="settings-hint">The workflow these launchers follow — branching, draft-PR rules, board IDs, and the "mark as done" steps. Stored at <code id="tsi-cookbook-path">localAIConfig/TRIAGE.local.md</code> and injected into the sessions this project's recipes start. Edits apply to the next session that runs.</div>
+                <textarea id="tsi-cookbook-editor" class="ps-textarea" rows="20" spellcheck="false" placeholder="Loading…"></textarea>
+                <div class="ps-textarea-actions">
+                  <button type="button" class="settings-btn-sm" id="tsi-cookbook-save">Save cookbook</button>
+                  <span class="ps-save-status" id="tsi-cookbook-status"></span>
+                </div>
+              </div>
+            </div>
             <!-- Dashboard / website connection -->
             <div class="settings-card hidden" id="tsi-dashboard">
               <div class="settings-card-body">
