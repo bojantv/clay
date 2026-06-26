@@ -1,6 +1,7 @@
 node_modules/
 .claude/
 .claude-relay/
+.clay/
 ref/
 TODO.md
 publish.sh
