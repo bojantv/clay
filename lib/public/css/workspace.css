@@ -197,6 +197,7 @@
 .ws-pin-btn:hover { color: var(--text); background: var(--bg-alt); }
 .ws-pin-btn [data-lucide] { width: 14px; height: 14px; }
 
+.ws-item-note { margin: 4px 0 0; color: var(--text-dim); font-size: 11px; font-style: italic; }
 .ws-labels { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 0; }
 .ws-label {
   font-size: 10px;
