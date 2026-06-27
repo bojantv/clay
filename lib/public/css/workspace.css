@@ -20,6 +20,13 @@
 #workspace-toggle-btn:hover { color: var(--text-secondary); background: rgba(var(--overlay-rgb),0.04); border-color: var(--border); }
 #workspace-toggle-btn.active { color: var(--text); background: rgba(var(--overlay-rgb),0.06); border-color: var(--border); }
 
+/* Refresh button: spin its icon while a workspace_get is in flight so the
+   click has visible feedback even when the resolved data is unchanged. */
+#workspace-refresh-btn.ws-refreshing { pointer-events: none; }
+#workspace-refresh-btn.ws-refreshing svg,
+#workspace-refresh-btn.ws-refreshing .lucide { animation: ws-refresh-spin 0.8s linear infinite; }
+@keyframes ws-refresh-spin { to { transform: rotate(360deg); } }
+
 /* Wide screens: split panel beside #app */
 @media (min-width: 1024px) {
   #workspace-panel {
