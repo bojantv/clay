@@ -33,3 +33,20 @@ test("shouldProbeLiveness: probe a stale-pong socket, skip a fresh or pending on
   // A probe is already in flight: don't pile on another.
   assert.strictEqual(shouldProbeLiveness(100000, 50000, HEARTBEAT, true), false);
 });
+
+test("shouldProcessSocketMessage: only the currently-active socket may render", async function () {
+  var { shouldProcessSocketMessage } = await loadPolicy();
+  var current = { id: "B" };
+  var discarded = { id: "A" };
+  // Frame arrived on the socket that is still active: process it.
+  assert.strictEqual(shouldProcessSocketMessage(current, current), true);
+  // The regression: a frame arriving on a discarded socket (previous project,
+  // still flushing during its async close) must NOT render into the new
+  // project's view. Session ids are project-local and collide across projects,
+  // so identity is the only reliable discriminator.
+  assert.strictEqual(shouldProcessSocketMessage(discarded, current), false, "stale socket -> drop");
+  // Defensive: missing sockets never process.
+  assert.strictEqual(shouldProcessSocketMessage(null, current), false);
+  assert.strictEqual(shouldProcessSocketMessage(current, null), false);
+  assert.strictEqual(shouldProcessSocketMessage(null, null), false);
+});
