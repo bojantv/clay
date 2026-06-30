@@ -510,6 +510,51 @@
     flex-shrink: 0;
   }
 
+  /* Worktree chips: smaller icon, slightly dimmed, hidden when parent collapsed */
+  .mobile-chat-chip.wt-chip .mobile-chat-chip-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+  }
+
+  .mobile-chat-chip.wt-chip {
+    opacity: 0.85;
+  }
+
+  .mobile-chat-chip.wt-hidden {
+    display: none;
+  }
+
+  .mobile-chat-chip.wt-disabled {
+    opacity: 0.4;
+  }
+
+  /* Inline worktree expand/collapse toggle on a parent chip */
+  .mobile-chat-chip-wt-toggle {
+    display: flex;
+    align-items: center;
+    margin-left: 2px;
+    padding: 4px;
+    border-radius: 6px;
+    color: var(--text-dimmer);
+    flex-shrink: 0;
+    transition: transform 0.15s ease, background 0.15s;
+  }
+
+  .mobile-chat-chip-wt-toggle:active {
+    background: rgba(var(--overlay-rgb), 0.12);
+  }
+
+  .mobile-chat-chip-wt-toggle.collapsed {
+    transform: rotate(-90deg);
+  }
+
+  .mobile-chat-chip-wt-toggle i,
+  .mobile-chat-chip-wt-toggle svg {
+    width: 13px;
+    height: 13px;
+  }
+
   .mobile-chat-session-list {
     flex: 1;
     overflow-y: auto;
