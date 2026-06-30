@@ -1,3 +1,10 @@
+## [2.44.1-beta.1](https://github.com/chadbyte/clay/compare/v2.44.0...v2.44.1-beta.1) (2026-06-30)
+
+
+### Bug Fixes
+
+* **os-users:** skip per-user Claude CLI install when already available ([#370](https://github.com/chadbyte/clay/issues/370)) ([761f6a5](https://github.com/chadbyte/clay/commit/761f6a5694a2d0ddb7a6eab4c73ba769f3160097)), closes [#368](https://github.com/chadbyte/clay/issues/368)
+
 # [2.44.0](https://github.com/chadbyte/clay/compare/v2.43.0...v2.44.0) (2026-06-18)
 
 
