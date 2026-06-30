@@ -1,3 +1,10 @@
+# [2.45.0-beta.2](https://github.com/chadbyte/clay/compare/v2.45.0-beta.1...v2.45.0-beta.2) (2026-06-30)
+
+
+### Bug Fixes
+
+* **model-picker:** show model picker for Claude GUI sessions ([#375](https://github.com/chadbyte/clay/issues/375)) ([6b6feb8](https://github.com/chadbyte/clay/commit/6b6feb86ba41cb880ca295055d8b4a2043c37523))
+
 # [2.45.0-beta.1](https://github.com/chadbyte/clay/compare/v2.44.1-beta.2...v2.45.0-beta.1) (2026-06-30)
 
 
