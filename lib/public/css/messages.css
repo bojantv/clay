@@ -875,6 +875,23 @@ pre.mermaid-error {
 
 .tool-result-block.collapsed { display: none; }
 
+/* Live streaming command output (replaced by .tool-result-block on completion) */
+.tool-live-output {
+  margin: 4px 0 8px 12px;
+  padding: 12px 14px;
+  background: var(--code-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--text-muted);
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
 .tool-result-block pre {
   padding: 12px 14px;
   font-family: "Roboto Mono", monospace;
