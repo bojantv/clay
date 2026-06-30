@@ -1,13 +1,34 @@
 # Claude Agent SDK Upgrade Tracker
 
-Installed: `@anthropic-ai/claude-agent-sdk@0.2.112` (Claude Code 2.1.112)
-Latest: `@anthropic-ai/claude-agent-sdk@0.2.132` (Claude Code 2.1.132, 2026-05-07)
-Updated: 2026-05-07
+Installed: `@anthropic-ai/claude-agent-sdk@0.3.196` (declared `^0.3.196`, bumped 2026-06-30)
+Latest: `@anthropic-ai/claude-agent-sdk@0.3.196` (2026-06-30)
+Updated: 2026-06-30
 
-Covers all unapplied changes from 0.2.80 through 0.2.132.
+npm bump to 0.3.196 is **done** (clean lockfile reinstall; peers @anthropic-ai/sdk@0.107.0, @modelcontextprotocol/sdk@1.29.0, zod@4.4.3). Static + load verification passed and runtime smoke confirmed. The 0.2.133 -> 0.3.196 feature work (items #68-90) is still **pending implementation** — only the version bump and breaking-change verification landed.
+
+Covers all unapplied changes from 0.2.80 through 0.3.196.
+The 0.2.133 -> 0.3.196 delta (items #68+) was derived by diffing the published `.d.ts` surface (installed 0.2.132 vs npm 0.3.196), not a changelog, so the "since" version tags inside that range are approximate.
 Codex multi-provider expansion planned. Items marked with Codex support are worth building as platform-common features.
 
 **Deliberate parity divergences** (decisions that go beyond per-API skip judgments) are tracked at the bottom of this file under "Parity Divergences" so the rationale is preserved alongside the upgrade trail.
+
+
+---
+
+
+## Current Focus (2026-06-30)
+
+**On 0.3.196.** The npm bump and breaking-change verification are done (see header). Active work is the 0.2.133 -> 0.3.196 feature backlog below. Older 0.2.x items (#6-63) stay open as lower-priority backlog; fully completed history lives in the **Archive** at the bottom of this file.
+
+Next up, in order (detail under "New in 0.2.133-0.3.196"):
+
+1. **#72** — host dialog / `onUserDialog`; lands long-standing **#14** (OAuth / interactive auth)
+2. **#73-74** — model-refusal messages (fallback + no-fallback)
+3. **#79 + #75** — `informational` + `permission_denied` system messages
+4. **#76-78** — `reloadSkills` (supersedes #8), `setMcpPermissionModeOverride`, `thinking_tokens`
+5. **#82-84** — `commands_changed`, `worker_shutting_down`, verify built-in tool surface (#84)
+
+Done: npm bump + #68-79 (incl. #76/#77 client UI). Deferred: #80 toolAliases, #81 backgroundTasks (no driver in Clay), #85 (experimental usage API).
 
 
 ---
@@ -75,9 +96,9 @@ Codex multi-provider expansion planned. Items marked with Codex support are wort
 
 | # | Item | Action | Codex | Current status | Where |
 |---|------|--------|:-----:|----------------|-------|
-| 40 | Assistant Worker module | Defer | | alpha, new module | -- |
-| 41 | `connectRemoteControl*` types | Defer | | alpha | -- |
-| 42 | Bridge enhancements | Defer | | alpha | -- |
+| 40 | ~~Assistant Worker module~~ | ~~Defer~~ | | **Retired** — `runAssistantWorker`/`AssistantWorker*` removed from SDK in 0.3.x (see #69) | -- |
+| 41 | ~~`connectRemoteControl*` types~~ | ~~Defer~~ | | **Retired** — removed from SDK in 0.3.x (see #70) | -- |
+| 42 | ~~Bridge enhancements~~ | ~~Defer~~ | | **Retired** — alpha bridge surface removed/reshaped in 0.3.x (see #70) | -- |
 | 43 | `taskBudget` query option | Defer | | alpha, beta header required | -- |
 
 
@@ -158,6 +179,73 @@ Diff is small — mostly Remote Control toggles and SessionStore alpha extension
 | 67 | `Options.sessionStoreFlush: 'batched' \| 'eager'` (0.2.128, alpha) | Defer | | Flush strategy for SessionStore mirroring. Relevant only if #58 lands | -- |
 
 
+### New in 0.2.133-0.3.196 (added 2026-06-30)
+
+Largest delta in the tracker: minor bump 0.2 -> 0.3 plus ~64 patches. Derived by diffing the published type surface, so version tags below are approximate. **Good news for the bump itself:** no `Options` key was removed, and Clay references none of the removed symbols, so installing `0.3.196` does not break existing call sites. The work is additive: new system-message subtypes to handle, the host-dialog (OAuth) callback that finally lands #14, and a few new query-handle methods.
+
+#### Removed upstream (no Clay impact — confirm & retire tracker entries)
+
+| # | Item | Action | Codex | Current status | Where |
+|---|------|--------|:-----:|----------------|-------|
+| 68 | `unstable_v2_*` session API + `SDKSession`/`SDKSessionOptions` removed | N/A | | Clay never adopted the v2 session API (grep clean). No action | -- |
+| 69 | Assistant Worker removed (`runAssistantWorker`, `AssistantWorker*`, `WorkerState*`) | N/A | | Upstream dropped the module. **Retires #40.** Clay never imported it | -- |
+| 70 | `connectRemoteControl*` + alpha bridge types removed | N/A | | Upstream dropped Remote Control client surface. **Retires #41-42.** Clay never used it | -- |
+| 71 | Permission/prompt types reshaped (`CanUseToolContext`, `InboundPrompt`, `PromptRequest`/`PromptResponse` removed) | **Verify** | | Clay references none of these names, but confirm our `canUseTool` callback still matches the current signature after the bump | `sdk-bridge.js` |
+
+#### P1 - High
+
+| # | Item | Action | Codex | Current status | Where |
+|---|------|--------|:-----:|----------------|-------|
+| 72 | `Options.onUserDialog` + `supportedDialogKinds` (`OnUserDialog`/`UserDialogRequest`/`UserDialogResult`) | **Do** | x | **Lands #14.** Host-rendered dialog channel (the OAuth/interactive-auth flow path). Must answer unrecognized `dialogKind` with `{behavior:'cancelled'}`; providing the callback without `supportedDialogKinds` opts in to nothing | `sdk-bridge.js` query options, client dialog |
+| 73 | `SDKModelRefusalFallbackMessage` (`subtype:'model_refusal_fallback'`) | **Do** | | Model refused and CLI fell back to another model (`direction: retry/revert/sticky`, `original_model`->`fallback_model`, `api_refusal_category`). Surface as a distinct notice instead of dropping silently | `sdk-message-processor.js`, client |
+| 74 | `SDKModelRefusalNoFallbackMessage` (`subtype:'model_refusal_no_fallback'`) | **Do** | | Hard refusal, no fallback (`content`, `api_refusal_explanation`, `refused_user_message_uuid`). Pairs with #73; render as a clear error state | `sdk-message-processor.js`, client |
+
+#### P2 - Medium
+
+| # | Item | Action | Codex | Current status | Where |
+|---|------|--------|:-----:|----------------|-------|
+| 75 | `SDKPermissionDeniedMessage` (`subtype:'permission_denied'`) | **Do** | x | Tool call denied: `tool_name`, `tool_use_id`, `decision_reason_type`/`decision_reason`, `agent_id` for subagents. Surface why a tool was blocked (distinct from hook-config #27) | `sdk-message-processor.js`, client |
+| 76 | `reloadSkills()` + `SDKControlReloadSkillsResponse` | **Do** | x | **Supersedes #8** (`reloadPlugins`). Hot-reload skills without a session restart | `sdk-bridge.js`, WS handler |
+| 77 | `setMcpPermissionModeOverride(server, 'default'\|'auto'\|null)` | **Do** | x | Realizes the runtime half of #12 (per-server MCP permission mode). Returns `warning` on fuzzy server-name match | `sdk-bridge.js`, `project-mcp.js` UI |
+| 78 | `SDKThinkingTokensMessage` (`subtype:'thinking_tokens'`) | **Do** | x | Live thinking-token estimate (`estimated_tokens`, `_delta`). Feeds #16/#17 (thinking display, ttft) | `sdk-message-processor.js`, client |
+| 79 | `SDKInformationalMessage` (`subtype:'informational'`) | **Do** | x | Generalizes #4 notification: `level: info\|notice\|suggestion\|warning`, `tool_use_id` dedupe, `prevent_continuation`. Honor the render level and stop-on-`prevent_continuation` | `sdk-message-processor.js`, client |
+| 80 | `Options.toolAliases: Record<string,string>` | Defer | x | No driver in Clay: aliasing exists to route built-ins to sandboxed equivalents, but sandbox is not adopted (#88). Revisit if/when a tool-alias config or sandbox lands | `sdk-bridge.js` query options |
+| 81 | `backgroundTasks(toolUseId?)` + `BackgroundTaskSummary` | Defer | x | Polling API with no trigger/UI in Clay. Background-agent state is already pushed via `task_updated`/`task_notification` (incl. backgrounded). Revisit if an on-demand refresh is needed | `sdk-bridge.js`, client task UI |
+
+#### P3 - Low
+
+| # | Item | Action | Codex | Current status | Where |
+|---|------|--------|:-----:|----------------|-------|
+| 82 | `SDKCommandsChangedMessage` (`subtype:'commands_changed'`) | **Do** | x | Slash-command list changed mid-session (`commands: SlashCommand[]`). Refresh the command palette live | `sdk-message-processor.js`, client |
+| 83 | `SDKWorkerShuttingDownMessage` (`subtype:'worker_shutting_down'`) | **Do** | x | Worker shutdown with `reason` (`host_exit`, `remote_control_disabled`, ...). Extends #7 TerminalReason for clean teardown messaging | `sdk-message-processor.js` |
+| 84 | New built-in tool surface (`Cron*`, `Task*`, `Workflow`, `Monitor`, `Artifact`, `Projects`, `PushNotification`, `RemoteTrigger`, `ScheduleWakeup`, `EnterPlanMode`, `ReportFindings`, `ReadMcpResourceDir`) | **Verify** | x | SDK now ships many built-in tool I/O types. Confirm Clay's tool display/permission UI renders unknown tool names with a generic fallback rather than breaking | `tools.js`, client tool display |
+| 85 | `usage_EXPERIMENTAL_MAY_CHANGE...()` + `SDKControlGetUsageResponse` | Defer | x | Richer usage than #51: `subscription_type` (pro/max/team/enterprise/null), per-model usage, rate-limit status. Method name explicitly warns "do not rely yet" — revisit when stabilized | `sdk-bridge.js` |
+
+#### Skip
+
+| # | Item | Action | Codex | Current status | Where |
+|---|------|--------|:-----:|----------------|-------|
+| 86 | `MessageDisplayHook*`, `StopHookSpecificOutput`, `SubagentStopHookSpecificOutput` | Skip | | Hooks not adopted | -- |
+| 87 | Settings resolution API (`resolveSettings`, `ResolvedSettings`, `ResolvedSettingSource`, `PolicySettingsOrigin`) | Skip | | Programmatic/managed-settings resolution. SDK-internal; relay manages its own settings | -- |
+| 88 | `SandboxCredentialsConfig` + sandbox settings | Skip | | Sandbox execution not adopted. Revisit if/when Clay pursues sandboxing | -- |
+| 89 | `reinitialize()` query method | Skip | | Relay restarts/lazy-resumes sessions itself | -- |
+| 90 | CLI/SDK internals (`extractFromBunfs`, `filterEscalatingDefaultMode`, `meta`, `SpawnOptions`, `REPL*`, `ShowOnboardingRolePicker*`, `ProvenanceEntry`, `SSEOptions`) | Skip | | Not part of the consumed query/message surface | -- |
+
+
+### Delta Action Summary (0.2.133-0.3.196)
+
+| | Count | Items |
+|--|-------|-------|
+| **Do** | 10 | #72-79, #82-83 |
+| of which **Codex-reusable** | 8 | #72, #75-79, #82-83 |
+| **Verify** | 2 | #71, #84 |
+| Defer | 3 | #80, #81, #85 |
+| Skip | 5 | #86-90 |
+| N/A (removed upstream) | 3 | #68-70 (retires #40-42) |
+
+Done so far: #68-79 (#72 host dialog, #73-74 refusal, #75 permission-denied, #76 reloadSkills, #77 MCP permission override, #78 thinking-tokens, #79 informational) plus #76/#77 client UI. Deferred #80/#81 (no driver in Clay). Remaining: #82-83 (messages) + #84 (verify).
+
+
 ---
 
 
@@ -178,13 +266,7 @@ Diff is small — mostly Remote Control toggles and SessionStore alpha extension
 
 ## Upgrade Steps
 
-### 0.2.92 -> 0.2.112 (done)
-1. ~~Verify `SDKSessionInfo.systemPrompt` handling works with `string[]`~~
-2. ~~Verify `EditFileOutput.originalFile` null handling~~
-3. ~~Verify no references to removed `proactive` settings block~~
-4. ~~`npm install @anthropic-ai/claude-agent-sdk@0.2.112`~~
-5. ~~Add `'xhigh'` to effort selector UI~~
-6. ~~Handle new message types: `task_updated`, `notification`, `plugin_install`~~
+> Completed step lists (0.2.38 -> 0.2.112) are in the Archive at the bottom.
 
 ### 0.2.112 -> 0.2.132 (next)
 1. **Verify** `query()` `settingSources` behavior (#44). Pass explicit `settingSources: ["user", "project", "local"]` already (relay does this) — confirm no regression.
@@ -194,6 +276,15 @@ Diff is small — mostly Remote Control toggles and SessionStore alpha extension
 5. Implement #6-12, #14-18 backlog as bandwidth allows.
 6. Tool `duration_ms` (#52) feeds #30 toolStats — implement together.
 7. Add `oauth_org_not_allowed` error path (#61) and extend origin propagation to replay messages (#62) when touching #10.
+
+### 0.2.132 -> 0.3.196 (npm bump done 2026-06-30; feature work pending)
+1. ~~Confirm Clay references none of the removed symbols (#68-70) — grep clean, retired #40-42~~
+2. ~~**Verify** `canUseTool` callback still matches current signature (#71) — sdk-bridge loads clean after bump~~
+3. ~~Clean lockfile reinstall to `^0.3.196`; peers resolved (@anthropic-ai/sdk@0.107.0, @modelcontextprotocol/sdk@1.29.0, zod@4.4.3)~~
+4. ~~Verify: SDK loads + `query` export; client-import + server/client `node --check` pass; sdk-bridge/claude adapter/yoke load; all 7 called SDK members present; runtime smoke~~
+5. Implement P1: host dialog / OAuth (#72, lands #14), then model-refusal messages (#73-74).
+6. Implement P2: `informational` + `permission_denied` messages (#79, #75), `reloadSkills` (#76, supersedes #8), `setMcpPermissionModeOverride` (#77), `thinking_tokens` (#78), `toolAliases` (#80), `backgroundTasks` (#81).
+7. Implement P3: `commands_changed` (#82), `worker_shutting_down` (#83). **Verify** built-in tool surface renders unknown tools gracefully (#84).
 
 
 ---
@@ -484,9 +575,21 @@ Decisions where Clay deliberately deviates from the Claude Code reference, beyon
 ---
 
 
-# Archive: 0.2.38 -> 0.2.76 (completed 2026-03-17)
+# Archive
 
-## Priority 1 - High (Functional gaps, user-facing impact) -- DONE
+## Upgrade Steps: 0.2.92 -> 0.2.112 (completed)
+
+1. ~~Verify `SDKSessionInfo.systemPrompt` handling works with `string[]`~~
+2. ~~Verify `EditFileOutput.originalFile` null handling~~
+3. ~~Verify no references to removed `proactive` settings block~~
+4. ~~`npm install @anthropic-ai/claude-agent-sdk@0.2.112`~~
+5. ~~Add `'xhigh'` to effort selector UI~~
+6. ~~Handle new message types: `task_updated`, `notification`, `plugin_install`~~
+
+
+## 0.2.38 -> 0.2.76 (completed 2026-03-17)
+
+### Priority 1 - High (Functional gaps, user-facing impact) -- DONE
 
 ### ~~1.1 `onElicitation` callback (since 0.2.39+)~~
 - ~~**Status:** Implemented~~
@@ -501,7 +604,7 @@ Decisions where Clay deliberately deviates from the Claude Code reference, beyon
 - ~~**Status:** Done~~
 
 
-## Priority 2 - Medium -- DONE
+### Priority 2 - Medium -- DONE
 
 ### ~~2.1 `listSessions()` (since 0.2.51+)~~
 - ~~**Status:** Implemented~~
@@ -519,7 +622,7 @@ Decisions where Clay deliberately deviates from the Claude Code reference, beyon
 - ~~**Status:** Implemented~~
 
 
-## Priority 3 - Low -- DONE
+### Priority 3 - Low -- DONE
 
 ### ~~3.1 `renameSession()` (since 0.2.74+)~~
 - ~~**Status:** Implemented~~
@@ -539,7 +642,7 @@ Decisions where Clay deliberately deviates from the Claude Code reference, beyon
 ### ~~3.6-3.8 Hook events, AgentDefinition.model, Settings export -- N/A~~
 
 
-## Already Implemented (0.2.38 -> 0.2.63 range)
+### Already Implemented (0.2.38 -> 0.2.63 range)
 
 - [x] `promptSuggestions` query option + `SDKPromptSuggestionMessage` handling
 - [x] `SDKRateLimitEvent` / `rate_limit_event` with UI display
