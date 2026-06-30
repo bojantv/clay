@@ -1431,7 +1431,16 @@ select.wt-modal-input {
   margin-left: auto;
   cursor: pointer;
   transition: transform 0.15s ease;
-  padding: 4px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.mobile-folder-chevron i,
+.mobile-folder-chevron svg {
+  width: 14px;
+  height: 14px;
 }
 
 .mobile-project-folder.collapsed .mobile-folder-chevron {
