@@ -1,3 +1,10 @@
+# [2.45.0-beta.1](https://github.com/chadbyte/clay/compare/v2.44.1-beta.2...v2.45.0-beta.1) (2026-06-30)
+
+
+### Features
+
+* **mates:** default Mates off (opt-in) ([#374](https://github.com/chadbyte/clay/issues/374)) ([dc1736f](https://github.com/chadbyte/clay/commit/dc1736f64a3fa9f1a03af3e33895ff75ddbf70ae))
+
 ## [2.44.1-beta.2](https://github.com/chadbyte/clay/compare/v2.44.1-beta.1...v2.44.1-beta.2) (2026-06-30)
 
 
