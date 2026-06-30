@@ -1,3 +1,10 @@
+## [2.44.1-beta.2](https://github.com/chadbyte/clay/compare/v2.44.1-beta.1...v2.44.1-beta.2) (2026-06-30)
+
+
+### Bug Fixes
+
+* **os-users:** inherit supplementary groups in spawned sessions ([#371](https://github.com/chadbyte/clay/issues/371)) ([8c5aae0](https://github.com/chadbyte/clay/commit/8c5aae0a0c7eccdedfc862616da3223143cd171a)), closes [#367](https://github.com/chadbyte/clay/issues/367)
+
 ## [2.44.1-beta.1](https://github.com/chadbyte/clay/compare/v2.44.0...v2.44.1-beta.1) (2026-06-30)
 
 
