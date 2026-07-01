@@ -1,3 +1,20 @@
+# [2.45.0](https://github.com/chadbyte/clay/compare/v2.44.0...v2.45.0) (2026-07-01)
+
+
+### Bug Fixes
+
+* **codex:** logged-out detection, login modal, and model listing ([#378](https://github.com/chadbyte/clay/issues/378)) ([a3314b0](https://github.com/chadbyte/clay/commit/a3314b041fada2ccbb6cadede8c37f4997d40922))
+* **model-picker:** show model picker for Claude GUI sessions ([#375](https://github.com/chadbyte/clay/issues/375)) ([6b6feb8](https://github.com/chadbyte/clay/commit/6b6feb86ba41cb880ca295055d8b4a2043c37523))
+* **os-users:** inherit supplementary groups in spawned sessions ([#371](https://github.com/chadbyte/clay/issues/371)) ([8c5aae0](https://github.com/chadbyte/clay/commit/8c5aae0a0c7eccdedfc862616da3223143cd171a)), closes [#367](https://github.com/chadbyte/clay/issues/367)
+* **os-users:** skip per-user Claude CLI install when already available ([#370](https://github.com/chadbyte/clay/issues/370)) ([761f6a5](https://github.com/chadbyte/clay/commit/761f6a5694a2d0ddb7a6eab4c73ba769f3160097)), closes [#368](https://github.com/chadbyte/clay/issues/368)
+
+
+### Features
+
+* **auth:** auto-open a modal login terminal when not logged in ([#376](https://github.com/chadbyte/clay/issues/376)) ([21136ec](https://github.com/chadbyte/clay/commit/21136ecdab262d16e9dfdfbe02f22ecb62c60ee9))
+* **mates:** default Mates off (opt-in) ([#374](https://github.com/chadbyte/clay/issues/374)) ([dc1736f](https://github.com/chadbyte/clay/commit/dc1736f64a3fa9f1a03af3e33895ff75ddbf70ae))
+* **whats-new:** add "GUI is back" and stop popping superseded entries ([#379](https://github.com/chadbyte/clay/issues/379)) ([e328b9f](https://github.com/chadbyte/clay/commit/e328b9fbc97f7d94697c1f0d022c0fea39c42126))
+
 # [2.45.0-beta.4](https://github.com/chadbyte/clay/compare/v2.45.0-beta.3...v2.45.0-beta.4) (2026-07-01)
 
 
