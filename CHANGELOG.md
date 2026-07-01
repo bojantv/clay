@@ -1,3 +1,10 @@
+# [2.45.0-beta.3](https://github.com/chadbyte/clay/compare/v2.45.0-beta.2...v2.45.0-beta.3) (2026-07-01)
+
+
+### Features
+
+* **auth:** auto-open a modal login terminal when not logged in ([#376](https://github.com/chadbyte/clay/issues/376)) ([21136ec](https://github.com/chadbyte/clay/commit/21136ecdab262d16e9dfdfbe02f22ecb62c60ee9))
+
 # [2.45.0-beta.2](https://github.com/chadbyte/clay/compare/v2.45.0-beta.1...v2.45.0-beta.2) (2026-06-30)
 
 
