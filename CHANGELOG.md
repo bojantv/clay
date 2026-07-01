@@ -29,6 +29,18 @@
 
 * **codex:** logged-out detection, login modal, and model listing ([#378](https://github.com/chadbyte/clay/issues/378)) ([a3314b0](https://github.com/chadbyte/clay/commit/a3314b041fada2ccbb6cadede8c37f4997d40922))
 
+
+### Features
+
+* **whats-new:** add "GUI is back" and stop popping superseded entries ([#379](https://github.com/chadbyte/clay/issues/379)) ([e328b9f](https://github.com/chadbyte/clay/commit/e328b9fbc97f7d94697c1f0d022c0fea39c42126))
+
+# [2.45.0-beta.4](https://github.com/chadbyte/clay/compare/v2.45.0-beta.3...v2.45.0-beta.4) (2026-07-01)
+
+
+### Bug Fixes
+
+* **codex:** logged-out detection, login modal, and model listing ([#378](https://github.com/chadbyte/clay/issues/378)) ([a3314b0](https://github.com/chadbyte/clay/commit/a3314b041fada2ccbb6cadede8c37f4997d40922))
+
 # [2.45.0-beta.3](https://github.com/chadbyte/clay/compare/v2.45.0-beta.2...v2.45.0-beta.3) (2026-07-01)
 
 
