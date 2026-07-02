@@ -92,7 +92,7 @@ test("needs-input marker pauses for input without completing", function () {
   }
 });
 
-test("auto-launch maxPasses config overrides pr-review recipe default", function () {
+test("auto-launch maxPasses config overrides pr-review recipe default", async function () {
   var cwd = fs.mkdtempSync(path.join(os.tmpdir(), "clay-autolaunch-"));
   var tasksDir = path.join(cwd, ".clay", "tasks");
   fs.mkdirSync(tasksDir, { recursive: true });
@@ -117,6 +117,9 @@ test("auto-launch maxPasses config overrides pr-review recipe default", function
   var launcher = {
     loadRecipe: function () {
       return recipe;
+    },
+    findExistingSessionForItem: function () {
+      return null;
     },
     startSessionForItem: function (ws, r, item) {
       launchedItem = Object.assign({}, item);
@@ -146,7 +149,7 @@ test("auto-launch maxPasses config overrides pr-review recipe default", function
   });
 
   try {
-    var result = autoLaunch.launchScheduled("pr-review");
+    var result = await autoLaunch.launchScheduled("pr-review");
     assert.strictEqual(result.started.length, 1);
     assert.ok(launchedItem, "PR item should launch");
     assert.strictEqual(launchedItem.max_passes, 5);
@@ -155,7 +158,158 @@ test("auto-launch maxPasses config overrides pr-review recipe default", function
   }
 });
 
-test("disabled auto-launch config ignores stale registry triggers", function () {
+test("issue auto-launch relaunches one legacy completed session without launch state", async function () {
+  var cwd = fs.mkdtempSync(path.join(os.tmpdir(), "clay-autolaunch-"));
+  var tasksDir = path.join(cwd, ".clay", "tasks");
+  fs.mkdirSync(tasksDir, { recursive: true });
+  fs.writeFileSync(path.join(tasksDir, "config.json"), JSON.stringify({
+    autoLaunch: {
+      enabled: true,
+      recipeId: "assigned-to-me",
+      recipes: ["assigned-to-me"],
+      cron: "*/5 * * * *",
+    },
+  }, null, 2) + "\n");
+
+  var recipe = {
+    id: "assigned-to-me",
+    source: { provider: "github", kind: "issues", repo: "owner/repo" },
+    launch: { defaultLimit: 5 },
+    session: { title: "Issue #{number} {title}" },
+    completion: {},
+  };
+  var item = {
+    number: 2002,
+    title: "Bounced issue",
+    url: "https://github.com/owner/repo/issues/2002",
+  };
+  var legacySession = {
+    taskLauncher: {
+      recipeId: "assigned-to-me",
+      itemNumber: 2002,
+      itemUrl: item.url,
+      workflowCompleted: true,
+    },
+  };
+  var launched = 0;
+  var launcher = {
+    loadRecipe: function () {
+      return recipe;
+    },
+    findExistingSessionForItem: function (r, candidate, liveOnly) {
+      assert.strictEqual(candidate.number, 2002);
+      return liveOnly ? null : legacySession;
+    },
+    startSessionForItem: function () {
+      launched++;
+      return { localId: 44, title: "Issue #2002 Bounced issue" };
+    },
+  };
+  var autoLaunch = attachAutoLaunch({
+    cwd: cwd,
+    sm: {
+      sessions: new Map(),
+      broadcastSessionList: function () {},
+    },
+    getTaskLauncher: function () {
+      return launcher;
+    },
+    fetchItems: function () {
+      return [item];
+    },
+  });
+
+  try {
+    var result = await autoLaunch.launchScheduled("assigned-to-me");
+    assert.strictEqual(result.started.length, 1);
+    assert.strictEqual(launched, 1);
+    var state = JSON.parse(fs.readFileSync(path.join(tasksDir, "issue-launch-state.json"), "utf8"));
+    assert.strictEqual(state["owner/repo#2002"].status, "launched");
+    assert.strictEqual(state["owner/repo#2002"].armed, false);
+  } finally {
+    fs.rmSync(cwd, { recursive: true, force: true });
+  }
+});
+
+test("issue auto-launch does not repeatedly relaunch a completed session after state exists", async function () {
+  var cwd = fs.mkdtempSync(path.join(os.tmpdir(), "clay-autolaunch-"));
+  var tasksDir = path.join(cwd, ".clay", "tasks");
+  fs.mkdirSync(tasksDir, { recursive: true });
+  fs.writeFileSync(path.join(tasksDir, "config.json"), JSON.stringify({
+    autoLaunch: {
+      enabled: true,
+      recipeId: "assigned-to-me",
+      recipes: ["assigned-to-me"],
+      cron: "*/5 * * * *",
+    },
+  }, null, 2) + "\n");
+  fs.writeFileSync(path.join(tasksDir, "issue-launch-state.json"), JSON.stringify({
+    "owner/repo#2002": {
+      status: "completed",
+      statusAtCompletion: "Ready for development",
+      armed: false,
+      lastLaunchAt: 1,
+      completedAt: 2,
+      updatedAt: 2,
+    },
+  }, null, 2) + "\n");
+
+  var recipe = {
+    id: "assigned-to-me",
+    source: { provider: "github", kind: "issues", repo: "owner/repo" },
+    launch: { defaultLimit: 5 },
+    session: { title: "Issue #{number} {title}" },
+    completion: {},
+  };
+  var item = {
+    number: 2002,
+    title: "Bounced issue",
+    url: "https://github.com/owner/repo/issues/2002",
+  };
+  var completedSession = {
+    taskLauncher: {
+      recipeId: "assigned-to-me",
+      itemNumber: 2002,
+      itemUrl: item.url,
+      workflowCompleted: true,
+    },
+  };
+  var launcher = {
+    loadRecipe: function () {
+      return recipe;
+    },
+    findExistingSessionForItem: function (r, candidate, liveOnly) {
+      assert.strictEqual(candidate.number, 2002);
+      return liveOnly ? null : completedSession;
+    },
+    startSessionForItem: function () {
+      throw new Error("should not launch");
+    },
+  };
+  var autoLaunch = attachAutoLaunch({
+    cwd: cwd,
+    sm: {
+      sessions: new Map(),
+      broadcastSessionList: function () {},
+    },
+    getTaskLauncher: function () {
+      return launcher;
+    },
+    fetchItems: function () {
+      return [item];
+    },
+  });
+
+  try {
+    var result = await autoLaunch.launchScheduled("assigned-to-me");
+    assert.strictEqual(result.started.length, 0);
+    assert.strictEqual(result.skipped.length, 1);
+  } finally {
+    fs.rmSync(cwd, { recursive: true, force: true });
+  }
+});
+
+test("disabled auto-launch config ignores stale registry triggers", async function () {
   var cwd = fs.mkdtempSync(path.join(os.tmpdir(), "clay-autolaunch-"));
   var tasksDir = path.join(cwd, ".clay", "tasks");
   fs.mkdirSync(tasksDir, { recursive: true });
@@ -200,7 +354,7 @@ test("disabled auto-launch config ignores stale registry triggers", function () 
   });
 
   try {
-    autoLaunch.runScheduled({ id: "autolaunch_assigned", task: "assigned-to-me" });
+    await autoLaunch.runScheduled({ id: "autolaunch_assigned", task: "assigned-to-me" });
     assert.strictEqual(fetched, 0);
     assert.strictEqual(launched, 0);
     assert.deepStrictEqual(updated, {
